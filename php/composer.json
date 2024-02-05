@@ -1,0 +1,23 @@
+{
+    "name": "edupellaux/demophp",
+    "description": "Application de démonstration d'une application PHP",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Core\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Alain Pellaux",
+            "email": "edu-pellauxa@eduge.ch"
+        },
+        {
+            "name": "Christian Zanardi",
+            "email": "edu-zanardic@eduge.ch"
+        }
+    ],
+    "require": {
+        "developermarius/simple-router": "5.1.0.5"
+    }
+}
