@@ -33,12 +33,13 @@
             this.btnAjouter = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.tbxRechercheDilemme = new System.Windows.Forms.TextBox();
             this.btnRechercheDilemme = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
             this.btnResetDilemme = new System.Windows.Forms.Button();
             this.btnModifierDilemme = new System.Windows.Forms.Button();
             this.btnSupprimerDilemme = new System.Windows.Forms.Button();
+            this.lsbCategorie = new System.Windows.Forms.ListBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,7 +75,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(1059, 13);
+            this.label2.Location = new System.Drawing.Point(12, 501);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(126, 25);
             this.label2.TabIndex = 3;
@@ -92,6 +93,15 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Rechercher les dilemmes d\'une cateorie";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(39, 45);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(102, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Nom de la categorie";
+            // 
             // tbxRechercheDilemme
             // 
             this.tbxRechercheDilemme.Location = new System.Drawing.Point(170, 42);
@@ -106,30 +116,20 @@
             this.btnRechercheDilemme.Location = new System.Drawing.Point(84, 82);
             this.btnRechercheDilemme.Name = "btnRechercheDilemme";
             this.btnRechercheDilemme.Size = new System.Drawing.Size(137, 38);
-            this.btnRechercheDilemme.TabIndex = 6;
+            this.btnRechercheDilemme.TabIndex = 8;
             this.btnRechercheDilemme.Text = "Rechercher";
             this.btnRechercheDilemme.UseVisualStyleBackColor = true;
             this.btnRechercheDilemme.Click += new System.EventHandler(this.btnRechercheDilemme_Click);
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(39, 45);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(102, 13);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Nom de la categorie";
-            // 
             // btnResetDilemme
             // 
-            this.btnResetDilemme.Enabled = false;
             this.btnResetDilemme.Location = new System.Drawing.Point(12, 450);
             this.btnResetDilemme.Name = "btnResetDilemme";
             this.btnResetDilemme.Size = new System.Drawing.Size(120, 32);
             this.btnResetDilemme.TabIndex = 9;
             this.btnResetDilemme.Text = "Reset la liste";
             this.btnResetDilemme.UseVisualStyleBackColor = true;
-            this.btnResetDilemme.Visible = false;
+            this.btnResetDilemme.Click += new System.EventHandler(this.btnResetDilemme_Click);
             // 
             // btnModifierDilemme
             // 
@@ -149,11 +149,20 @@
             this.btnSupprimerDilemme.Text = "Supprimer un dilemme";
             this.btnSupprimerDilemme.UseVisualStyleBackColor = true;
             // 
+            // lsbCategorie
+            // 
+            this.lsbCategorie.FormattingEnabled = true;
+            this.lsbCategorie.Location = new System.Drawing.Point(17, 547);
+            this.lsbCategorie.Name = "lsbCategorie";
+            this.lsbCategorie.Size = new System.Drawing.Size(456, 329);
+            this.lsbCategorie.TabIndex = 12;
+            // 
             // frmPagePrincipale
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1315, 495);
+            this.ClientSize = new System.Drawing.Size(1011, 914);
+            this.Controls.Add(this.lsbCategorie);
             this.Controls.Add(this.btnSupprimerDilemme);
             this.Controls.Add(this.btnModifierDilemme);
             this.Controls.Add(this.btnResetDilemme);
@@ -165,6 +174,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "frmPagePrincipale";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Accueil";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -186,6 +196,7 @@
         private System.Windows.Forms.Button btnResetDilemme;
         private System.Windows.Forms.Button btnModifierDilemme;
         private System.Windows.Forms.Button btnSupprimerDilemme;
+        private System.Windows.Forms.ListBox lsbCategorie;
     }
 }
 

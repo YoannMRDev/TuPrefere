@@ -23,6 +23,8 @@ namespace Backend_TuPreferes
             {
                 cmbCategorie.Items.Add(row[1]);
             }
+
+            cmbCategorie.SelectedItem = cmbCategorie.Items[0];
         }
 
         /// <summary>

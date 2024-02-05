@@ -19,11 +19,15 @@ namespace Backend_TuPreferes
         {
             InitializeComponent();
             functionDB = new FunctionDB(new DB("localhost", "root", "Super", "TuPrefere"));
-            LoadAllDilemmesInListBox(functionDB.GetAllDilemmes());
-            
+            LoadAllDilemmesInListBoxDilemme(functionDB.GetAllDilemmes());
+            LoadAllDilemmesInListBoxCategorie(functionDB.GetAllCategorie());
         }
 
-        private void LoadAllDilemmesInListBox(List<string[]> results)
+        /// <summary>
+        /// Mettre toutes les infos récupéres des dilemmes dans la listbox
+        /// </summary>
+        /// <param name="results"></param>
+        private void LoadAllDilemmesInListBoxDilemme(List<string[]> results)
         {
             lsbDilemmes.Items.Clear();
             foreach (string[] row in results)
@@ -32,6 +36,21 @@ namespace Backend_TuPreferes
                 lsbDilemmes.Items.Add(text);
             }
         }
+
+        /// <summary>
+        /// Mettre toutes les infos récupéres des categories dans la listbox
+        /// </summary>
+        /// <param name="results"></param>
+        private void LoadAllDilemmesInListBoxCategorie(List<string[]> results)
+        {
+            lsbCategorie.Items.Clear();
+            foreach (string[] row in results)
+            {
+                string text = $"Nom : {row[1]}";
+                lsbCategorie.Items.Add(text);
+            }
+        }
+
 
         private void btnAjouter_Click(object sender, EventArgs e)
         {
@@ -42,7 +61,7 @@ namespace Backend_TuPreferes
             if (result == DialogResult.OK)
             {
                 functionDB.AjouterDilemme(ajouterDilemme.GetChoix1(), ajouterDilemme.GetChoix2(), ajouterDilemme.GetCategorie());
-                LoadAllDilemmesInListBox(functionDB.GetAllDilemmes());
+                LoadAllDilemmesInListBoxDilemme(functionDB.GetAllDilemmes());
             }
         }
 
@@ -56,12 +75,17 @@ namespace Backend_TuPreferes
             int id = functionDB.GetCategorieByNom(tbxRechercheDilemme.Text);
             if (id != -1)
             {
-                LoadAllDilemmesInListBox(functionDB.GetAllDilemmesOfCategorie(tbxRechercheDilemme.Text));
+                LoadAllDilemmesInListBoxDilemme(functionDB.GetAllDilemmesOfCategorie(tbxRechercheDilemme.Text));
             }
             else
             {
                 MessageBox.Show("Cette catégorie n'existe pas", "Attention");
             }
+        }
+
+        private void btnResetDilemme_Click(object sender, EventArgs e)
+        {
+            LoadAllDilemmesInListBoxDilemme(functionDB.GetAllDilemmes());
         }
     }
 }
