@@ -15,6 +15,11 @@ class IndexController
         View::render("Accueil.php");
     }
 
+    public function creePartie()
+    {
+        View::render("CreePartie.php");
+    }
+
     // public function show($id)
     // {
     //     $tache = Tache::read($id);

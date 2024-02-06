@@ -10,10 +10,13 @@
                     <a class="nav-link active text-white" aria-current="page" href="/accueil">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active text-white" aria-current="page" href="/creePartie">Crée une partie</a>
+                    <a class="nav-link active text-white" aria-current="page" href="/amis">Amis</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active text-white" aria-current="page" href="/amis">Amis</a>
+                    <a class="nav-link active text-white" aria-current="page" href="/creePartie">Crée</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active text-white" aria-current="page" href="/rejoindrePartie">Rejoindre</a>
                 </li>
             </ul>
             <a class="nav-link" href="/logout"><i class="bi bi-door-closed text-white"></i></i></a>

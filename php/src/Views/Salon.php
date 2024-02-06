@@ -15,11 +15,7 @@
         <?php include 'Header.php' ?>
     </header>
     <main class="m-5">
-        <div class="d-flex justify-content-center">
-            <a href="/creePartie" class="btn btn-primary d-flex justify-content-center align-items-center" style="width: 80%; height: 100px;">
-                <p class="fw-bold fs-3 text-light">Crée une partie</p>
-            </a>
-        </div>
+        salon
     </main>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

@@ -1,7 +1,14 @@
 <?php
-$mode = $args["login"];
-$error = $args["error"];
-$msgError = $args["msgError"];
+$error = "";
+if (isset($args["login"])) {
+    $mode = $args["login"];
+}
+if (isset($args["error"])) {
+    $error = $args["error"];
+}
+if (isset($args["msgError"])) {
+    $msgError = $args["msgError"];
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
