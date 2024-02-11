@@ -18,7 +18,7 @@ namespace Backend_TuPreferes.DataBase
         }
 
         /// <summary>
-        /// Retourne tous les dilemmes
+        /// Return all the dilemmas
         /// </summary>
         public List<string[]> GetAllDilemma()
         {
@@ -34,9 +34,9 @@ namespace Backend_TuPreferes.DataBase
         }
 
         /// <summary>
-        /// Retourne les dilemmes d'une catégorie
+        /// Return all the dilemmas of a category
         /// </summary>
-        /// <param name="categorie">nom de la categorie</param>
+        /// <param name="categorie">name of the categorie</param>
         /// <returns></returns>
         public List<string[]> GetAllDilemmaOfCategory(string categorie)
         {
@@ -52,12 +52,15 @@ namespace Backend_TuPreferes.DataBase
             return null;
         }
 
+
+
+
         /// <summary>
-        /// Ajoute un dilemme
+        ///  Ajoute un dilemme
         /// </summary>
-        /// <param name="choix1">choix numéro 1</param>
-        /// <param name="choix2">choix numéro 2</param>
-        /// <param name="categorie">nom de la categorie</param>
+        /// <param name="choix1">choice number 1</param>
+        /// <param name="choix2">choice number 2</param>
+        /// <param name="categorie">name of the categorie</param>
         public void AddDilemma(string choix1, string choix2, string categorie)
         {
             MySqlParameter[] parameters = {
@@ -69,7 +72,7 @@ namespace Backend_TuPreferes.DataBase
         }
 
         /// <summary>
-        /// Supprime un dilemme avec son id
+        /// Delete a dilemma
         /// </summary>
         /// <param name="id">id du dilemme</param>
         public void DeleteDilemma(int id)
@@ -81,7 +84,7 @@ namespace Backend_TuPreferes.DataBase
         }
 
         /// <summary>
-        /// Retourne un id de categorie avec le nom
+        /// Return the id of a category with the name
         /// </summary>
         /// <param name="nom">nom de la categorie</param>
         public int GetCategoryByName(string name)
@@ -100,7 +103,7 @@ namespace Backend_TuPreferes.DataBase
         }
 
         /// <summary>
-        /// Retourne un nom de categorie avec l'id
+        /// Return the name of a category with the id
         /// </summary>
         /// <param name="id">id de la categorie</param>
         public string GetNomCategoryById(int id)
@@ -115,7 +118,7 @@ namespace Backend_TuPreferes.DataBase
         }
 
         /// <summary>
-        /// Retourne toutes les catégories
+        /// Return all the categories
         /// </summary>
         public List<string[]> GetAllCategory()
         {
@@ -129,5 +132,79 @@ namespace Backend_TuPreferes.DataBase
             MessageBox.Show("Erreur lors de l'exécution de la requête.");
             return null;
         }
+
+        /// <summary>
+        /// Add a category to the database
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
+        public string AddCategory(string category)
+        {
+            MySqlParameter[] parameters ={
+            new MySqlParameter("@category", MySqlDbType.String) { Value = category },
+         };
+
+            try
+            {
+                List<string[]> existingCategories = db.dbRun("SELECT nom FROM categorie WHERE nom = @category", parameters);
+                if (existingCategories.Count > 0)
+                {
+                    return "La catégorie existe déjà.";
+                }
+                db.dbRun("INSERT INTO categorie (nom) VALUES (@category)", parameters);
+                return "Catégorie ajoutée avec succès.";
+            }
+            catch (MySqlException e)
+            {
+                MessageBox.Show(e.ToString());
+                return "Une erreur s'est produite lors de l'ajout de la catégorie.";
+            }
+        }
+
+
+        /// <summary>
+        /// Switch if the category is archived or not
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public string ToggleArchive(int id)
+        {
+            try
+            {
+                List<string[]> currentStatus = db.dbRun("SELECT archiver FROM categorie WHERE idCategorie = @id", new MySqlParameter[] { new MySqlParameter("@id", id) });
+                if (currentStatus.Count > 0)
+                {
+                    int currentState = Convert.ToBoolean(currentStatus[0][0]) ? 1 : 0;
+
+                    int newState = (currentState == 0) ? 1 : 0;
+
+                    db.dbRun("UPDATE categorie SET archiver = @newState WHERE idCategorie = @id",
+                             new MySqlParameter[] { new MySqlParameter("@newState", newState), new MySqlParameter("@id", id) });
+
+                    return "État de l'élément mis à jour avec succès.";
+                }
+                else
+                {
+                    return "L'élément spécifié n'existe pas.";
+                }
+            }
+            catch (MySqlException e)
+            {
+                MessageBox.Show(e.ToString());
+                return "Une erreur s'est produite lors de la mise à jour de l'état de l'élément.";
+            }
+        }
+
+        /// <summary>
+        /// Modify the name of a category
+        /// </summary>
+        /// <param name="oldName"></param>
+        /// <param name="newName"></param>
+        public void ModifyCategoryName(string oldName ,string newName)
+        {
+                     db.dbRun("UPDATE categorie SET nom = @newName Where nom = @oldName", new MySqlParameter[] { new MySqlParameter("@oldName", oldName), new MySqlParameter("@newName", newName) });
+        }
+
+
     }
 }

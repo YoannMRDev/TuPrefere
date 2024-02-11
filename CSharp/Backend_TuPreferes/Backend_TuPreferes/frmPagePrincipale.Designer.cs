@@ -40,7 +40,17 @@
             this.btnModifierDilemme = new System.Windows.Forms.Button();
             this.btnSupprimerDilemme = new System.Windows.Forms.Button();
             this.lsbCategorie = new System.Windows.Forms.ListBox();
+            this.btnAjoutCategorie = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.tbxCategorie = new System.Windows.Forms.TextBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnModifierCategorie = new System.Windows.Forms.Button();
+            this.tbxModifierCategorie = new System.Windows.Forms.TextBox();
+            this.cbxCategorie = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // lsbDilemmes
@@ -92,7 +102,7 @@
             this.groupBox1.Size = new System.Drawing.Size(329, 150);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Rechercher les dilemmes d\'une cateorie";
+            this.groupBox1.Text = "Rechercher les dilemmes d\'une categorie";
             // 
             // label3
             // 
@@ -161,12 +171,91 @@
             this.lsbCategorie.Name = "lsbCategorie";
             this.lsbCategorie.Size = new System.Drawing.Size(456, 329);
             this.lsbCategorie.TabIndex = 12;
+            this.lsbCategorie.SelectedIndexChanged += new System.EventHandler(this.lsbCategorie_SelectedIndexChanged);
+            // 
+            // btnAjoutCategorie
+            // 
+            this.btnAjoutCategorie.Location = new System.Drawing.Point(93, 87);
+            this.btnAjoutCategorie.Name = "btnAjoutCategorie";
+            this.btnAjoutCategorie.Size = new System.Drawing.Size(120, 37);
+            this.btnAjoutCategorie.TabIndex = 13;
+            this.btnAjoutCategorie.Text = "Ajouter une catégorie";
+            this.btnAjoutCategorie.UseVisualStyleBackColor = true;
+            this.btnAjoutCategorie.Click += new System.EventHandler(this.btnAjoutCategorie_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.label4);
+            this.groupBox2.Controls.Add(this.btnAjoutCategorie);
+            this.groupBox2.Controls.Add(this.tbxCategorie);
+            this.groupBox2.Location = new System.Drawing.Point(568, 547);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(329, 150);
+            this.groupBox2.TabIndex = 9;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Ajouter une catégorie";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(39, 45);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(102, 13);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Nom de la categorie";
+            // 
+            // tbxCategorie
+            // 
+            this.tbxCategorie.Location = new System.Drawing.Point(170, 42);
+            this.tbxCategorie.Name = "tbxCategorie";
+            this.tbxCategorie.Size = new System.Drawing.Size(115, 20);
+            this.tbxCategorie.TabIndex = 7;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.cbxCategorie);
+            this.groupBox3.Controls.Add(this.btnModifierCategorie);
+            this.groupBox3.Controls.Add(this.tbxModifierCategorie);
+            this.groupBox3.Location = new System.Drawing.Point(568, 715);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(329, 150);
+            this.groupBox3.TabIndex = 14;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Modifier une catégorie";
+            // 
+            // btnModifierCategorie
+            // 
+            this.btnModifierCategorie.Location = new System.Drawing.Point(93, 84);
+            this.btnModifierCategorie.Name = "btnModifierCategorie";
+            this.btnModifierCategorie.Size = new System.Drawing.Size(120, 37);
+            this.btnModifierCategorie.TabIndex = 13;
+            this.btnModifierCategorie.Text = "Modifier une catégorie";
+            this.btnModifierCategorie.UseVisualStyleBackColor = true;
+            this.btnModifierCategorie.Click += new System.EventHandler(this.btnModifierCategorie_Click);
+            // 
+            // tbxModifierCategorie
+            // 
+            this.tbxModifierCategorie.Location = new System.Drawing.Point(170, 42);
+            this.tbxModifierCategorie.Name = "tbxModifierCategorie";
+            this.tbxModifierCategorie.Size = new System.Drawing.Size(115, 20);
+            this.tbxModifierCategorie.TabIndex = 7;
+            // 
+            // cbxCategorie
+            // 
+            this.cbxCategorie.FormattingEnabled = true;
+            this.cbxCategorie.Location = new System.Drawing.Point(41, 41);
+            this.cbxCategorie.Name = "cbxCategorie";
+            this.cbxCategorie.Size = new System.Drawing.Size(121, 21);
+            this.cbxCategorie.TabIndex = 14;
+            this.cbxCategorie.SelectedIndexChanged += new System.EventHandler(this.cbxCategorie_SelectedIndexChanged);
             // 
             // frmPagePrincipale
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1011, 914);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.lsbCategorie);
             this.Controls.Add(this.btnSupprimerDilemme);
             this.Controls.Add(this.btnModifierDilemme);
@@ -183,6 +272,10 @@
             this.Text = "Accueil";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -202,6 +295,14 @@
         private System.Windows.Forms.Button btnModifierDilemme;
         private System.Windows.Forms.Button btnSupprimerDilemme;
         private System.Windows.Forms.ListBox lsbCategorie;
+        private System.Windows.Forms.Button btnAjoutCategorie;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox tbxCategorie;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button btnModifierCategorie;
+        private System.Windows.Forms.TextBox tbxModifierCategorie;
+        private System.Windows.Forms.ComboBox cbxCategorie;
     }
 }
 
