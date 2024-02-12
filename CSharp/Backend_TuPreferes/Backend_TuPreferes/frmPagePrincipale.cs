@@ -92,21 +92,42 @@ namespace Backend_TuPreferes
         private void lsbDilemmes_SelectedIndexChanged(object sender, EventArgs e)
         {
             btnSupprimerDilemme.Enabled = lsbDilemmes.SelectedItem != null;
+            btnModifierDilemme.Enabled = lsbDilemmes.SelectedItem != null;
         }
+
+
 
         private void btnSupprimerDilemme_Click(object sender, EventArgs e)
         {
             if (lsbDilemmes.SelectedItem != null)
             {
                 // Récupère l'id dans le texte
-                string text = lsbDilemmes.SelectedItem.ToString();
-                string[] array = text.Split(',');
+                string[] array = lsbDilemmes.SelectedItem.ToString().Split(',');
                 int id = Convert.ToInt32(array[0].Substring(array.Length));
 
                 functionDB.DeleteDilemma(id);
 
                 // Recharge les données
                 LoadAllDilemmesInListBoxDilemme(functionDB.GetAllDilemma());
+            }
+        }
+
+        private void btnModifierDilemme_Click(object sender, EventArgs e)
+        {
+            if (lsbDilemmes.SelectedItem != null)
+            {
+                // Récupère l'id dans le texte
+                string[] array = lsbDilemmes.SelectedItem.ToString().Split(',');
+                int id = Convert.ToInt32(array[0].Substring(array.Length));
+
+                frmAjouterDilemme frmModifierDilemme = new frmAjouterDilemme(functionDB, functionDB.GetDilemmaOfId(id));
+
+                DialogResult result = frmModifierDilemme.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+
+                }
             }
         }
     }

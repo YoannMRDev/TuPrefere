@@ -134,12 +134,14 @@
             // 
             // btnModifierDilemme
             // 
+            this.btnModifierDilemme.Enabled = false;
             this.btnModifierDilemme.Location = new System.Drawing.Point(661, 288);
             this.btnModifierDilemme.Name = "btnModifierDilemme";
             this.btnModifierDilemme.Size = new System.Drawing.Size(120, 37);
             this.btnModifierDilemme.TabIndex = 10;
             this.btnModifierDilemme.Text = "Modifier un dilemme";
             this.btnModifierDilemme.UseVisualStyleBackColor = true;
+            this.btnModifierDilemme.Click += new System.EventHandler(this.btnModifierDilemme_Click);
             // 
             // btnSupprimerDilemme
             // 
