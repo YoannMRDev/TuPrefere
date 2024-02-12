@@ -19,7 +19,7 @@
             <form method="post" action="">
                 <div class="mb-3">
                     <label for="FormControlInput1CodeRejoindrePartie" class="form-label">Code pour rejoindre une partie : </label>
-                    <input name="codeRejoindrePartie" type="text" class="form-control" id="FormControlInput1CodeRejoindrePartie" placeholder="#46Yh78" required>
+                    <input name="codeRejoindrePartie" type="text" class="form-control" id="FormControlInput1CodeRejoindrePartie" placeholder="#46Ygth78" required>
                 </div>
                 <div>
                     <button class="btn form-btn form-control bg-primary text-light" name="submit" value="rejoindrePartie">Rejoindre la partie</button>

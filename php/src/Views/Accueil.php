@@ -18,7 +18,7 @@
         <div class="d-flex justify-content-center">
             <a href="/creePartie" class="btn btn-primary d-flex justify-content-center align-items-center" style="width: 80%; height: 100px;">
                 <p class="fw-bold fs-3 text-light">Crée une partie</p>
-            </a>
+            </a>  
         </div>
     </main>
 </body>

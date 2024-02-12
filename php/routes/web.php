@@ -23,15 +23,11 @@ SimpleRouter::group(
     function () {
         SimpleRouter::get('/accueil', [IndexController::class, 'index']);
         SimpleRouter::get('/creePartie', [CreePartieController::class, 'index']);
+        SimpleRouter::post('/creePartie', [CreePartieController::class, 'add']);
         SimpleRouter::get('/rejoindrePartie', [RejoindrePartieController::class, 'index']);
+        SimpleRouter::post('/rejoindrePartie', [RejoindrePartieController::class, 'join']);
         SimpleRouter::get('/salon', [SalonController::class, 'index']);
         
-        // SimpleRouter::get('/tache/add', [IndexController::class, 'add']);
-        // SimpleRouter::post('/tache/add', [IndexController::class, 'apply_add']);
-        // SimpleRouter::get('/tache/{i}', [IndexController::class, 'show']);
-        // SimpleRouter::get('/tache/delete/{i}', [IndexController::class, 'delete']);
-        // SimpleRouter::get('/tache/modify/{i}', [IndexController::class, 'modify']);
-        // SimpleRouter::post('/tache/modify/{i}', [IndexController::class, 'apply_modify']);
 
         SimpleRouter::get('/user/profile', function () {
             // Uses Auth Middleware
