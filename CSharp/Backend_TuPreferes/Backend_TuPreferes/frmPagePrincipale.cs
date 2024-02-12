@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -18,21 +19,22 @@ namespace Backend_TuPreferes
         public frmPagePrincipale()
         {
             InitializeComponent();
-            functionDB = new FunctionDB(new DB("localhost", "root", "Super", "TuPrefere"));
-            LoadAllDilemmesInListBoxDilemme(functionDB.GetAllDilemmes());
-            LoadAllDilemmesInListBoxCategorie(functionDB.GetAllCategorie());
+            functionDB = new FunctionDB(new DB("localhost", "root", "Super", "TuPrefere",3306));
+            LoadDataInListBoxDilemme(functionDB.GetAllDilemma());
+            LoadDataInListBoxCategorie(functionDB.GetAllCategory());
+            LoadCategoriesToComboBox(functionDB.GetAllCategory());
         }
 
         /// <summary>
         /// Mettre toutes les infos récupéres des dilemmes dans la listbox
         /// </summary>
         /// <param name="results"></param>
-        private void LoadAllDilemmesInListBoxDilemme(List<string[]> results)
+        private void LoadDataInListBoxDilemme(List<string[]> results)
         {
             lsbDilemmes.Items.Clear();
             foreach (string[] row in results)
             {
-                string text = $"Choix 1 : {row[1]}, Choix 2 : {row[2]}, Archiver : {row[3]},Categorie : {functionDB.GetNomCategorieById(Convert.ToInt32(row[4]))}";
+                string text = $"Id : {row[0]}, Choix 1 : {row[1]}, Choix 2 : {row[2]}, Archiver : {row[3]},Categorie : {functionDB.GetNomCategoryById(Convert.ToInt32(row[4]))}";
                 lsbDilemmes.Items.Add(text);
             }
         }
@@ -41,16 +43,15 @@ namespace Backend_TuPreferes
         /// Mettre toutes les infos récupéres des categories dans la listbox
         /// </summary>
         /// <param name="results"></param>
-        private void LoadAllDilemmesInListBoxCategorie(List<string[]> results)
+        private void LoadDataInListBoxCategorie(List<string[]> results)
         {
             lsbCategorie.Items.Clear();
             foreach (string[] row in results)
             {
-                string text = $"Nom : {row[1]}";
+                string text = $" ID : {row[0]} - Nom : {row[1]} - Archiver : {row[2]} ";
                 lsbCategorie.Items.Add(text);
             }
         }
-
 
         private void btnAjouter_Click(object sender, EventArgs e)
         {
@@ -60,8 +61,8 @@ namespace Backend_TuPreferes
 
             if (result == DialogResult.OK)
             {
-                functionDB.AjouterDilemme(ajouterDilemme.GetChoix1(), ajouterDilemme.GetChoix2(), ajouterDilemme.GetCategorie());
-                LoadAllDilemmesInListBoxDilemme(functionDB.GetAllDilemmes());
+                functionDB.AddDilemma(ajouterDilemme.GetChoix1(), ajouterDilemme.GetChoix2(), ajouterDilemme.GetCategorie());
+                LoadDataInListBoxDilemme(functionDB.GetAllDilemma());
             }
         }
 
@@ -72,10 +73,10 @@ namespace Backend_TuPreferes
 
         private void btnRechercheDilemme_Click(object sender, EventArgs e)
         {
-            int id = functionDB.GetCategorieByNom(tbxRechercheDilemme.Text);
+            int id = functionDB.GetCategoryByName(tbxRechercheDilemme.Text);
             if (id != -1)
             {
-                LoadAllDilemmesInListBoxDilemme(functionDB.GetAllDilemmesOfCategorie(tbxRechercheDilemme.Text));
+                LoadDataInListBoxDilemme(functionDB.GetAllDilemmaOfCategory(tbxRechercheDilemme.Text));
             }
             else
             {
@@ -85,7 +86,129 @@ namespace Backend_TuPreferes
 
         private void btnResetDilemme_Click(object sender, EventArgs e)
         {
-            LoadAllDilemmesInListBoxDilemme(functionDB.GetAllDilemmes());
+            LoadDataInListBoxDilemme(functionDB.GetAllDilemma());
+        }
+
+        private void lsbDilemmes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btnSupprimerDilemme.Enabled = lsbDilemmes.SelectedItem != null;
+            btnModifierDilemme.Enabled = lsbDilemmes.SelectedItem != null;
+        }
+        private void btnSupprimerDilemme_Click(object sender, EventArgs e)
+        {
+            if (lsbDilemmes.SelectedItem != null)
+            {
+                // Récupère l'id dans le texte
+                string[] array = lsbDilemmes.SelectedItem.ToString().Split(',');
+                int id = Convert.ToInt32(array[0].Substring(array.Length));
+
+                functionDB.ArchiveDilemma(id);
+
+                // Recharge les données
+                LoadDataInListBoxDilemme(functionDB.GetAllDilemma());
+            }
+            else
+            {
+                MessageBox.Show("Il faut séléctionner un dilemme");
+            }
+        }
+
+        private void btnModifierDilemme_Click(object sender, EventArgs e)
+        {
+            if (lsbDilemmes.SelectedItem != null)
+            {
+                // Récupère l'id dans le texte
+                string[] arrayData = lsbDilemmes.SelectedItem.ToString().Split(',');
+                int id = Convert.ToInt32(arrayData[0].Substring(arrayData.Length));
+
+                frmAjouterDilemme modifierDilemme = new frmAjouterDilemme(functionDB, functionDB.GetDilemmaOfId(id));
+                DialogResult result = modifierDilemme.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    functionDB.UpdateDilemme(modifierDilemme.GetChoix1(), modifierDilemme.GetChoix2(), functionDB.GetCategoryByName(modifierDilemme.GetCategorie()), modifierDilemme.GetArchiver(), id);
+
+                    // Recharge les données
+                    LoadDataInListBoxDilemme(functionDB.GetAllDilemma());
+                }
+            }
+            else
+            {
+                MessageBox.Show("Il faut séléctionner un dilemme");
+            }
+        }
+
+        private void btnAjoutCategorie_Click(object sender, EventArgs e)
+        {
+            string newCategory = tbxCategorie.Text;
+            if (!string.IsNullOrWhiteSpace(newCategory))
+            {
+                string result = functionDB.AddCategory(newCategory);
+                MessageBox.Show(result);
+                
+                // Rafraîchir la liste des catégories dans la ComboBox après l'ajout
+                LoadCategoriesToComboBox(functionDB.GetAllCategory());
+            }
+            else
+            {
+                MessageBox.Show("Veuillez entrer le nom de la nouvelle catégorie.");
+            }
+        }
+
+        private void lsbCategorie_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Vérifier si un élément est sélectionné dans la ListBox
+            if (lsbCategorie.SelectedItem != null)
+            {
+                // Supposons que le texte de l'élément sélectionné est au format "ID : 1 - Nom : Ecologie - Archiver : False"
+                string selectedItem = lsbCategorie.SelectedItem.ToString();
+
+                // Extraire l'ID de l'élément sélectionné
+                int id;
+                string[] parts = selectedItem.Split(new string[] { "ID :" }, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length >= 2)
+                {
+                    string idPart = parts[1].Split('-')[0].Trim();
+                    if (int.TryParse(idPart, out id))
+                    {
+                        // Appeler la méthode ToggleArchive avec l'ID extrait
+                        functionDB.ToggleArchive(id);
+                    }
+                }
+            }
+            LoadDataInListBoxCategorie(functionDB.GetAllCategory());
+        }
+
+        private void btnModifierCategorie_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(tbxModifierCategorie.Text))
+            {
+                functionDB.ModifyCategoryName(cbxCategorie.Text, tbxModifierCategorie.Text);
+                LoadDataInListBoxCategorie(functionDB.GetAllCategory());
+                LoadCategoriesToComboBox(functionDB.GetAllCategory());
+                LoadDataInListBoxDilemme(functionDB.GetAllDilemma());
+                cbxCategorie.Text = tbxModifierCategorie.Text;
+            }
+            else
+            {
+                MessageBox.Show("Veuillez entrer le nom de la catégorie a modifiée.");
+            }
+        }
+
+        private void cbxCategorie_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadDataInListBoxCategorie(functionDB.GetAllCategory());
+            tbxModifierCategorie.Text = cbxCategorie.Text;
+        }
+
+        private void LoadCategoriesToComboBox(List<string[]> results)
+        {
+            cbxCategorie.Items.Clear();
+            foreach (string[] row in results)
+            {
+                // Ajouter le nom de la catégorie à la ComboBox
+                cbxCategorie.Items.Add(row[1]);
+            }
         }
     }
 }

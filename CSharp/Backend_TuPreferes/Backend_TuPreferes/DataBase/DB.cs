@@ -12,8 +12,9 @@ namespace Backend_TuPreferes.DataBase
     public class DB
     {
         private MySqlConnectionStringBuilder builder;
+        private MySqlConnection connection;
 
-        public DB(string server, string username, string password, string dbName)
+        public DB(string server, string username, string password, string dbName, uint port)
         {
             builder = new MySqlConnectionStringBuilder();
 
@@ -21,40 +22,39 @@ namespace Backend_TuPreferes.DataBase
             builder.UserID = username;
             builder.Password = password;
             builder.Database = dbName;
+            builder.Port = port;
+
+            connection = new MySqlConnection(builder.ConnectionString);
         }
 
         public List<string[]> dbRun(string sql, MySqlParameter[] param = null)
         {
-            MySqlConnection connection = null;
             try
             {
-                using (connection = new MySqlConnection(builder.ConnectionString))
+                connection.Open();
+
+                using (MySqlCommand command = new MySqlCommand(sql, connection))
                 {
-                    connection.Open();
-
-                    using (MySqlCommand command = new MySqlCommand(sql, connection))
+                    if (param != null)
                     {
-                        if (param != null)
-                        {
-                            command.Parameters.AddRange(param);
-                        }
+                        command.Parameters.AddRange(param);
+                    }
 
-                        using (MySqlDataReader reader = command.ExecuteReader())
-                        {
-                            List<string[]> result = new List<string[]>();
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        List<string[]> result = new List<string[]>();
 
-                            while (reader.Read())
+                        while (reader.Read())
+                        {
+                            string[] values = new string[reader.FieldCount];
+                            for (int i = 0; i < reader.FieldCount; i++)
                             {
-                                string[] values = new string[reader.FieldCount];
-                                for (int i = 0; i < reader.FieldCount; i++)
-                                {
-                                    values[i] = reader[i].ToString();
-                                }
-                                result.Add(values);
+                                values[i] = reader[i].ToString();
                             }
-
-                            return result;
+                            result.Add(values);
                         }
+
+                        return result;
                     }
                 }
             }
