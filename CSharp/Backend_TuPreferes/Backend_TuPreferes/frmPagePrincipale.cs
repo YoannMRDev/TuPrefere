@@ -20,8 +20,8 @@ namespace Backend_TuPreferes
         {
             InitializeComponent();
             functionDB = new FunctionDB(new DB("localhost", "root", "Super", "TuPrefere",3306));
-            LoadAllDilemmesInListBoxDilemme(functionDB.GetAllDilemma());
-            LoadAllDilemmesInListBoxCategorie(functionDB.GetAllCategory());
+            LoadDataInListBoxDilemme(functionDB.GetAllDilemma());
+            LoadDataInListBoxCategorie(functionDB.GetAllCategory());
             LoadCategoriesToComboBox(functionDB.GetAllCategory());
         }
 
@@ -29,7 +29,7 @@ namespace Backend_TuPreferes
         /// Mettre toutes les infos récupéres des dilemmes dans la listbox
         /// </summary>
         /// <param name="results"></param>
-        private void LoadAllDilemmesInListBoxDilemme(List<string[]> results)
+        private void LoadDataInListBoxDilemme(List<string[]> results)
         {
             lsbDilemmes.Items.Clear();
             foreach (string[] row in results)
@@ -39,14 +39,11 @@ namespace Backend_TuPreferes
             }
         }
 
-
-
-
         /// <summary>
         /// Mettre toutes les infos récupéres des categories dans la listbox
         /// </summary>
         /// <param name="results"></param>
-        private void LoadAllDilemmesInListBoxCategorie(List<string[]> results)
+        private void LoadDataInListBoxCategorie(List<string[]> results)
         {
             lsbCategorie.Items.Clear();
             foreach (string[] row in results)
@@ -55,7 +52,6 @@ namespace Backend_TuPreferes
                 lsbCategorie.Items.Add(text);
             }
         }
-
 
         private void btnAjouter_Click(object sender, EventArgs e)
         {
@@ -66,7 +62,7 @@ namespace Backend_TuPreferes
             if (result == DialogResult.OK)
             {
                 functionDB.AddDilemma(ajouterDilemme.GetChoix1(), ajouterDilemme.GetChoix2(), ajouterDilemme.GetCategorie());
-                LoadAllDilemmesInListBoxDilemme(functionDB.GetAllDilemma());
+                LoadDataInListBoxDilemme(functionDB.GetAllDilemma());
             }
         }
 
@@ -80,7 +76,7 @@ namespace Backend_TuPreferes
             int id = functionDB.GetCategoryByName(tbxRechercheDilemme.Text);
             if (id != -1)
             {
-                LoadAllDilemmesInListBoxDilemme(functionDB.GetAllDilemmaOfCategory(tbxRechercheDilemme.Text));
+                LoadDataInListBoxDilemme(functionDB.GetAllDilemmaOfCategory(tbxRechercheDilemme.Text));
             }
             else
             {
@@ -90,7 +86,7 @@ namespace Backend_TuPreferes
 
         private void btnResetDilemme_Click(object sender, EventArgs e)
         {
-            LoadAllDilemmesInListBoxDilemme(functionDB.GetAllDilemma());
+            LoadDataInListBoxDilemme(functionDB.GetAllDilemma());
         }
 
         private void lsbDilemmes_SelectedIndexChanged(object sender, EventArgs e)
@@ -109,7 +105,7 @@ namespace Backend_TuPreferes
                 functionDB.ArchiveDilemma(id);
 
                 // Recharge les données
-                LoadAllDilemmesInListBoxDilemme(functionDB.GetAllDilemma());
+                LoadDataInListBoxDilemme(functionDB.GetAllDilemma());
             }
             else
             {
@@ -133,7 +129,7 @@ namespace Backend_TuPreferes
                     functionDB.UpdateDilemme(modifierDilemme.GetChoix1(), modifierDilemme.GetChoix2(), functionDB.GetCategoryByName(modifierDilemme.GetCategorie()), modifierDilemme.GetArchiver(), id);
 
                     // Recharge les données
-                    LoadAllDilemmesInListBoxDilemme(functionDB.GetAllDilemma());
+                    LoadDataInListBoxDilemme(functionDB.GetAllDilemma());
                 }
             }
             else
@@ -143,21 +139,21 @@ namespace Backend_TuPreferes
         }
 
         private void btnAjoutCategorie_Click(object sender, EventArgs e)
-{
-    string newCategory = tbxCategorie.Text;
-    if (!string.IsNullOrWhiteSpace(newCategory))
-    {
-        string result = functionDB.AddCategory(newCategory);
-        MessageBox.Show(result);
-        
-        // Rafraîchir la liste des catégories dans la ComboBox après l'ajout
-        LoadCategoriesToComboBox(functionDB.GetAllCategory());
-    }
-    else
-    {
-        MessageBox.Show("Veuillez entrer le nom de la nouvelle catégorie.");
-    }
-}
+        {
+            string newCategory = tbxCategorie.Text;
+            if (!string.IsNullOrWhiteSpace(newCategory))
+            {
+                string result = functionDB.AddCategory(newCategory);
+                MessageBox.Show(result);
+                
+                // Rafraîchir la liste des catégories dans la ComboBox après l'ajout
+                LoadCategoriesToComboBox(functionDB.GetAllCategory());
+            }
+            else
+            {
+                MessageBox.Show("Veuillez entrer le nom de la nouvelle catégorie.");
+            }
+        }
 
         private void lsbCategorie_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -176,32 +172,34 @@ namespace Backend_TuPreferes
                     if (int.TryParse(idPart, out id))
                     {
                         // Appeler la méthode ToggleArchive avec l'ID extrait
-                        string result = functionDB.ToggleArchive(id);
-
-                        // Afficher le résultat
+                        functionDB.ToggleArchive(id);
                     }
-    
                 }
-    
             }
-  
-
-            LoadAllDilemmesInListBoxCategorie(functionDB.GetAllCategory());
+            LoadDataInListBoxCategorie(functionDB.GetAllCategory());
         }
 
         private void btnModifierCategorie_Click(object sender, EventArgs e)
         {
-            functionDB.ModifyCategoryName(cbxCategorie.Text, tbxModifierCategorie.Text);
-            LoadAllDilemmesInListBoxCategorie(functionDB.GetAllCategory());
+            if (!string.IsNullOrWhiteSpace(tbxModifierCategorie.Text))
+            {
+                functionDB.ModifyCategoryName(cbxCategorie.Text, tbxModifierCategorie.Text);
+                LoadDataInListBoxCategorie(functionDB.GetAllCategory());
+                LoadCategoriesToComboBox(functionDB.GetAllCategory());
+                LoadDataInListBoxDilemme(functionDB.GetAllDilemma());
+                cbxCategorie.Text = tbxModifierCategorie.Text;
+            }
+            else
+            {
+                MessageBox.Show("Veuillez entrer le nom de la catégorie a modifiée.");
+            }
         }
-
 
         private void cbxCategorie_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadAllDilemmesInListBoxCategorie(functionDB.GetAllCategory());
+            LoadDataInListBoxCategorie(functionDB.GetAllCategory());
             tbxModifierCategorie.Text = cbxCategorie.Text;
         }
-
 
         private void LoadCategoriesToComboBox(List<string[]> results)
         {

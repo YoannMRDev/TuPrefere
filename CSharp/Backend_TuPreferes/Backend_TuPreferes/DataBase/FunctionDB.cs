@@ -199,8 +199,7 @@ namespace Backend_TuPreferes.DataBase
         /// Switch if the category is archived or not
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
-        public string ToggleArchive(int id)
+        public void ToggleArchive(int id)
         {
             try
             {
@@ -214,17 +213,11 @@ namespace Backend_TuPreferes.DataBase
                     db.dbRun("UPDATE categorie SET archiver = @newState WHERE idCategorie = @id",
                              new MySqlParameter[] { new MySqlParameter("@newState", newState), new MySqlParameter("@id", id) });
 
-                    return "État de l'élément mis à jour avec succès.";
-                }
-                else
-                {
-                    return "L'élément spécifié n'existe pas.";
                 }
             }
             catch (MySqlException e)
             {
                 MessageBox.Show(e.ToString());
-                return "Une erreur s'est produite lors de la mise à jour de l'état de l'élément.";
             }
         }
 
