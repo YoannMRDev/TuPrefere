@@ -18,7 +18,7 @@ namespace Backend_TuPreferes
         public frmAjouterDilemme(FunctionDB functionDB)
         {
             InitializeComponent();
-            categories = functionDB.GetAllCategorie();
+            categories = functionDB.GetAllCategory();
             foreach (string[] row in categories)
             {
                 cmbCategorie.Items.Add(row[1]);

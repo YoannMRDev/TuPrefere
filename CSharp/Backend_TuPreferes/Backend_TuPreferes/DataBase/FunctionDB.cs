@@ -20,7 +20,7 @@ namespace Backend_TuPreferes.DataBase
         /// <summary>
         /// Retourne tous les dilemmes
         /// </summary>
-        public List<string[]> GetAllDilemmes()
+        public List<string[]> GetAllDilemma()
         {
             List<string[]> results = db.dbRun("SELECT * FROM question");
 
@@ -38,10 +38,10 @@ namespace Backend_TuPreferes.DataBase
         /// </summary>
         /// <param name="categorie">nom de la categorie</param>
         /// <returns></returns>
-        public List<string[]> GetAllDilemmesOfCategorie(string categorie)
+        public List<string[]> GetAllDilemmaOfCategory(string categorie)
         {
             MySqlParameter[] parameters = {
-                new MySqlParameter("@id", MySqlDbType.Int32) { Value = GetCategorieByNom(categorie)},
+                new MySqlParameter("@id", MySqlDbType.Int32) { Value = GetCategoryByName(categorie)},
             };
             List<string[]> results = db.dbRun("SELECT * FROM question WHERE idCategorie = @id", parameters);
             if (results != null)
@@ -58,24 +58,36 @@ namespace Backend_TuPreferes.DataBase
         /// <param name="choix1">choix numéro 1</param>
         /// <param name="choix2">choix numéro 2</param>
         /// <param name="categorie">nom de la categorie</param>
-        public void AjouterDilemme(string choix1, string choix2, string categorie)
+        public void AddDilemma(string choix1, string choix2, string categorie)
         {
             MySqlParameter[] parameters = {
                 new MySqlParameter("@choix1", MySqlDbType.VarChar) { Value = choix1 },
                 new MySqlParameter("@choix2", MySqlDbType.VarChar) { Value = choix2 },
-                new MySqlParameter("@idCategorie", MySqlDbType.Int32) { Value = GetCategorieByNom(categorie) }
+                new MySqlParameter("@idCategorie", MySqlDbType.Int32) { Value = GetCategoryByName(categorie) }
             };
             db.dbRun("INSERT INTO question (choix1, choix2, idCategorie) VALUES (@choix1, @choix2, @idCategorie)", parameters);
+        }
+
+        /// <summary>
+        /// Supprime un dilemme avec son id
+        /// </summary>
+        /// <param name="id">id du dilemme</param>
+        public void DeleteDilemma(int id)
+        {
+            MySqlParameter[] parameters = {
+                new MySqlParameter("@id", MySqlDbType.Int32) { Value = id }
+            };
+            db.dbRun("DELETE FROM question WHERE idQuestion = @id", parameters);
         }
 
         /// <summary>
         /// Retourne un id de categorie avec le nom
         /// </summary>
         /// <param name="nom">nom de la categorie</param>
-        public int GetCategorieByNom(string nom)
+        public int GetCategoryByName(string name)
         {
             MySqlParameter[] parameters ={
-                new MySqlParameter("@nom", MySqlDbType.VarChar) { Value = nom },
+                new MySqlParameter("@nom", MySqlDbType.VarChar) { Value = name },
             };
 
             List<string[]> results = db.dbRun("SELECT idCategorie FROM categorie WHERE nom = @nom", parameters);
@@ -91,7 +103,7 @@ namespace Backend_TuPreferes.DataBase
         /// Retourne un nom de categorie avec l'id
         /// </summary>
         /// <param name="id">id de la categorie</param>
-        public string GetNomCategorieById(int id)
+        public string GetNomCategoryById(int id)
         {
             MySqlParameter[] parameters ={
                 new MySqlParameter("@id", MySqlDbType.Int32) { Value = id },
@@ -105,7 +117,7 @@ namespace Backend_TuPreferes.DataBase
         /// <summary>
         /// Retourne toutes les catégories
         /// </summary>
-        public List<string[]> GetAllCategorie()
+        public List<string[]> GetAllCategory()
         {
             List<string[]> results = db.dbRun("SELECT * FROM categorie");
 

@@ -50,6 +50,7 @@
             this.lsbDilemmes.Name = "lsbDilemmes";
             this.lsbDilemmes.Size = new System.Drawing.Size(608, 381);
             this.lsbDilemmes.TabIndex = 0;
+            this.lsbDilemmes.SelectedIndexChanged += new System.EventHandler(this.lsbDilemmes_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -142,12 +143,14 @@
             // 
             // btnSupprimerDilemme
             // 
+            this.btnSupprimerDilemme.Enabled = false;
             this.btnSupprimerDilemme.Location = new System.Drawing.Point(661, 356);
             this.btnSupprimerDilemme.Name = "btnSupprimerDilemme";
             this.btnSupprimerDilemme.Size = new System.Drawing.Size(120, 37);
             this.btnSupprimerDilemme.TabIndex = 11;
             this.btnSupprimerDilemme.Text = "Supprimer un dilemme";
             this.btnSupprimerDilemme.UseVisualStyleBackColor = true;
+            this.btnSupprimerDilemme.Click += new System.EventHandler(this.btnSupprimerDilemme_Click);
             // 
             // lsbCategorie
             // 
