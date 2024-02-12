@@ -36,6 +36,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.cmbCategorie = new System.Windows.Forms.ComboBox();
             this.btnAjouter = new System.Windows.Forms.Button();
+            this.cbxArchiver = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -111,18 +112,32 @@
             this.btnAjouter.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnAjouter.Enabled = false;
             this.btnAjouter.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAjouter.Location = new System.Drawing.Point(43, 268);
+            this.btnAjouter.Location = new System.Drawing.Point(43, 299);
             this.btnAjouter.Name = "btnAjouter";
             this.btnAjouter.Size = new System.Drawing.Size(228, 44);
             this.btnAjouter.TabIndex = 9;
             this.btnAjouter.Text = "Ajouter un dilemme";
             this.btnAjouter.UseVisualStyleBackColor = true;
             // 
+            // cbxArchiver
+            // 
+            this.cbxArchiver.AutoSize = true;
+            this.cbxArchiver.Enabled = false;
+            this.cbxArchiver.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbxArchiver.Location = new System.Drawing.Point(142, 263);
+            this.cbxArchiver.Name = "cbxArchiver";
+            this.cbxArchiver.Size = new System.Drawing.Size(80, 22);
+            this.cbxArchiver.TabIndex = 12;
+            this.cbxArchiver.Text = "Archiver";
+            this.cbxArchiver.UseVisualStyleBackColor = true;
+            this.cbxArchiver.Visible = false;
+            // 
             // frmAjouterDilemme
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(780, 335);
+            this.ClientSize = new System.Drawing.Size(780, 372);
+            this.Controls.Add(this.cbxArchiver);
             this.Controls.Add(this.btnAjouter);
             this.Controls.Add(this.cmbCategorie);
             this.Controls.Add(this.label4);
@@ -148,5 +163,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cmbCategorie;
         private System.Windows.Forms.Button btnAjouter;
+        private System.Windows.Forms.CheckBox cbxArchiver;
     }
 }

@@ -19,7 +19,7 @@ namespace Backend_TuPreferes
         public frmPagePrincipale()
         {
             InitializeComponent();
-            functionDB = new FunctionDB(new DB("localhost", "root", "Super", "dbTuPrefere",3306));
+            functionDB = new FunctionDB(new DB("localhost", "root", "Super", "TuPrefere",3306));
             LoadAllDilemmesInListBoxDilemme(functionDB.GetAllDilemma());
             LoadAllDilemmesInListBoxCategorie(functionDB.GetAllCategory());
             LoadCategoriesToComboBox(functionDB.GetAllCategory());
@@ -98,9 +98,6 @@ namespace Backend_TuPreferes
             btnSupprimerDilemme.Enabled = lsbDilemmes.SelectedItem != null;
             btnModifierDilemme.Enabled = lsbDilemmes.SelectedItem != null;
         }
-
-
-
         private void btnSupprimerDilemme_Click(object sender, EventArgs e)
         {
             if (lsbDilemmes.SelectedItem != null)
@@ -109,33 +106,43 @@ namespace Backend_TuPreferes
                 string[] array = lsbDilemmes.SelectedItem.ToString().Split(',');
                 int id = Convert.ToInt32(array[0].Substring(array.Length));
 
-                functionDB.DeleteDilemma(id);
+                functionDB.ArchiveDilemma(id);
 
                 // Recharge les données
                 LoadAllDilemmesInListBoxDilemme(functionDB.GetAllDilemma());
+            }
+            else
+            {
+                MessageBox.Show("Il faut séléctionner un dilemme");
             }
         }
 
         private void btnModifierDilemme_Click(object sender, EventArgs e)
         {
-            //if (lsbDilemmes.SelectedItem != null)
-            //{
-            //    // Récupère l'id dans le texte
-            //    string[] array = lsbDilemmes.SelectedItem.ToString().Split(',');
-            //    int id = Convert.ToInt32(array[0].Substring(array.Length));
+            if (lsbDilemmes.SelectedItem != null)
+            {
+                // Récupère l'id dans le texte
+                string[] arrayData = lsbDilemmes.SelectedItem.ToString().Split(',');
+                int id = Convert.ToInt32(arrayData[0].Substring(arrayData.Length));
 
-            //    frmAjouterDilemme frmModifierDilemme = new frmAjouterDilemme(functionDB, functionDB.GetDilemmaOfId(id));
+                frmAjouterDilemme modifierDilemme = new frmAjouterDilemme(functionDB, functionDB.GetDilemmaOfId(id));
+                DialogResult result = modifierDilemme.ShowDialog();
 
-            //    DialogResult result = frmModifierDilemme.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    functionDB.UpdateDilemme(modifierDilemme.GetChoix1(), modifierDilemme.GetChoix2(), functionDB.GetCategoryByName(modifierDilemme.GetCategorie()), modifierDilemme.GetArchiver(), id);
 
-            //    if (result == DialogResult.OK)
-            //    {
-
-            //    }
-            //}
+                    // Recharge les données
+                    LoadAllDilemmesInListBoxDilemme(functionDB.GetAllDilemma());
+                }
+            }
+            else
+            {
+                MessageBox.Show("Il faut séléctionner un dilemme");
+            }
         }
 
-   private void btnAjoutCategorie_Click(object sender, EventArgs e)
+        private void btnAjoutCategorie_Click(object sender, EventArgs e)
 {
     string newCategory = tbxCategorie.Text;
     if (!string.IsNullOrWhiteSpace(newCategory))

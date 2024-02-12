@@ -52,9 +52,6 @@ namespace Backend_TuPreferes.DataBase
             return null;
         }
 
-
-
-
         /// <summary>
         ///  Ajoute un dilemme
         /// </summary>
@@ -72,15 +69,51 @@ namespace Backend_TuPreferes.DataBase
         }
 
         /// <summary>
-        /// Delete a dilemma
+        /// Retourne un dilemme avec l'id
+        /// </summary>
+        /// <param name="id"></param>
+        public List<string[]> GetDilemmaOfId(int id)
+        {
+            MySqlParameter[] parameters = {
+                new MySqlParameter("@id", MySqlDbType.Int32) { Value = id},
+            };
+            List<string[]> results = db.dbRun("SELECT * FROM question WHERE idQuestion = @id", parameters);
+
+            if (results != null)
+            {
+                return results;
+            }
+
+            MessageBox.Show("Erreur lors de l'exécution de la requête.");
+            return null;
+        }
+
+        /// <summary>
+        /// Met à jour le dilemme
+        /// </summary>
+        public void UpdateDilemme(string choix1, string choix2, int idCategorie, int archiver, int idQuestion)
+        {
+            MySqlParameter[] parameters = {
+                new MySqlParameter("@choix1", MySqlDbType.VarChar) { Value = choix1 },
+                new MySqlParameter("@choix2", MySqlDbType.VarChar) { Value = choix2 },
+                new MySqlParameter("@archiver", MySqlDbType.Int32) { Value = archiver},
+                new MySqlParameter("@idCategorie", MySqlDbType.Int32) { Value = idCategorie},
+                new MySqlParameter("@idQuestion", MySqlDbType.Int32) { Value = idQuestion},
+            };
+
+            db.dbRun("UPDATE question SET choix1 = @choix1, choix2 = @choix2, archiver = @archiver, idCategorie = @idCategorie WHERE idQuestion = @idQuestion", parameters);
+        }
+
+        /// <summary>
+        /// Supprime un dilemme avec son id
         /// </summary>
         /// <param name="id">id du dilemme</param>
-        public void DeleteDilemma(int id)
+        public void ArchiveDilemma(int id)
         {
             MySqlParameter[] parameters = {
                 new MySqlParameter("@id", MySqlDbType.Int32) { Value = id }
             };
-            db.dbRun("DELETE FROM question WHERE idQuestion = @id", parameters);
+            db.dbRun("UPDATE question SET archiver = 1 WHERE idQuestion = @id", parameters);
         }
 
         /// <summary>
