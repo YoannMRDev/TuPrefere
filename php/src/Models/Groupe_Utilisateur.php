@@ -92,4 +92,12 @@ class Groupe_Utilisateur extends Model
         $groupe = $req->fetchAll();
         return $groupe;
     }
+
+    public static function deleteByUtilisateur(int $idUtilisateur)
+    {
+        $db = static::getDB();
+        $req = $db->prepare("DELETE FROM groupe_utilisateur WHERE idUtilisateur = :idUtilisateur");
+        $req->bindParam(":idUtilisateur", $idUtilisateur);
+        $req->execute();
+    }
 }

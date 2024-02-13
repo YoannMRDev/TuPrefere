@@ -27,7 +27,11 @@ SimpleRouter::group(
         SimpleRouter::get('/rejoindrePartie', [RejoindrePartieController::class, 'index']);
         SimpleRouter::post('/rejoindrePartie', [RejoindrePartieController::class, 'join']);
         SimpleRouter::get('/salon', [SalonController::class, 'index']);
-        
+        SimpleRouter::get('/salon/data', [SalonController::class, 'getData']);
+        SimpleRouter::post('/salon/leave', [SalonController::class, 'leaveSalon']);
+        SimpleRouter::get('/salon/user-info', [SalonController::class, 'getUserGroupInfo']);
+
+
 
         SimpleRouter::get('/user/profile', function () {
             // Uses Auth Middleware

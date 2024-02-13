@@ -24,6 +24,12 @@ class RejoindrePartieController
             "idGroupe" => $this->validate()->idGroupe,
         ];
 
+        // Vérifier si l'utilisateur n'est pas déjà dans le groupe
+        // if (Groupe_Utilisateur::read($data["idGroupe"]) != null) {
+        //     header("Location: /salon");
+        //     exit;
+        // }
+
         if(Groupe_Utilisateur::create($data) != null){
             header("Location: /salon");
             exit;

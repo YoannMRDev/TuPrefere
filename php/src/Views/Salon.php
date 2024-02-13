@@ -1,7 +1,3 @@
-<?php
-$groupeInfo = $args['groupeInfo'];
-$utilisateursGroupe = $args['utilisateursGroupe'];
-?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -28,43 +24,20 @@ $utilisateursGroupe = $args['utilisateursGroupe'];
         </div>
         <div class="input-group mb-5" style="width: 300px;">
             <h5 class="text-secondary">Information sur la partie</h5>
-            <table class="table border rounded-5">
-                <tr>
-                    <th>Nombre de joueur</th>
-                    <td><?= $groupeInfo[0]->nbJoueur ?></td>
-                </tr>
-                <tr>
-                    <th>Nombre de question</th>
-                    <td><?= $groupeInfo[0]->nbQuestion ?></td>
-                </tr>
-                <tr>
-                    <th>Temps de réponse</th>
-                    <td><?= $groupeInfo[0]->tempsReponse / 60 ?>min</td>
-                </tr>
-                <tr>
-                    <th>Thème</th>
-                    <td><?= $groupeInfo[0]->nom ?></td>
-                </tr>
+            <table class="table border border-secondary-emphasis rounded-5" id="salon-info">
+                <!-- Informations sur la partie -->
             </table>
         </div>
         <div class="input-group mb-3" style="width: 300px;">
             <h5 class="text-secondary">Liste des joueurs en ligne</h5>
-            <table class="table border rounded-5">
-                <tr>
-                    <th>N°</th>
-                    <th>Joueur</th>
-                </tr>
-                <?php
-                for ($i = 0; $i < $groupeInfo[0]->nbJoueur; $i++) {
-                ?>
-                    <tr>
-                        <td><?= $i + 1 ?></td>
-                        <td><?= key_exists($i, $utilisateursGroupe) ? $utilisateursGroupe[$i]->pseudo : "" ?></td>
-                    </tr>
-                <?php
-                }
-                ?>
+            <table class="table border border-secondary-emphasis rounded-5">
+                <tbody id="user-list">
+                    <!-- Tableau pour afficher la liste des joueurs -->
+                </tbody>
             </table>
+        </div>
+        <div class="input-group mb-3" style="width: 300px;">
+            <button class="btn btn-danger" id="leave-salon-btn" style="width: 100%;">Quitter le salon</button>
         </div>
     </main>
 </body>
@@ -84,6 +57,90 @@ $utilisateursGroupe = $args['utilisateursGroupe'];
     document.getElementById("button-addon2").addEventListener("click", function() {
         copyToClipboard("input2");
     });
+
+    function updateSalonInfo() {
+        fetch('/salon/data')
+            .then(response => response.json())
+            .then(data => {
+                const userList = document.getElementById('user-list');
+                const salonInfo = document.getElementById('salon-info');
+
+                // Mise à jour des informations sur la partie
+                salonInfo.innerHTML = `
+                    <tr>
+                        <th>Nombre de joueur</th>
+                        <td>${data.groupeInfo[0].nbJoueur}</td>
+                    </tr>
+                    <tr>
+                        <th>Nombre de question</th>
+                        <td>${data.groupeInfo[0].nbQuestion}</td>
+                    </tr>
+                    <tr>
+                        <th>Temps de réponse</th>
+                        <td>${data.groupeInfo[0].tempsReponse / 60}min</td>
+                    </tr>
+                    <tr>
+                        <th>Thème</th>
+                        <td>${data.groupeInfo[0].nom}</td>
+                    </tr>
+            `;
+
+                // Mise à jour de la liste des joueurs en ligne
+                userList.innerHTML = '';
+                data.utilisateursGroupe.forEach((utilisateur, index) => {
+                    userList.innerHTML += `
+                        <tr>
+                            <th>${index + 1}</th>
+                            <td>${utilisateur.pseudo}</td>
+                        </tr>`;
+                });
+            })
+            .catch(error => console.error('Erreur lors de la récupération des données du salon:', error));
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updateSalonInfo();
+        setInterval(updateSalonInfo, 2000);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+            // Nouvelle requête Fetch pour récupérer userId et groupId
+            fetch('/salon/user-info')
+                .then(response => response.json())
+                .then(data => {
+                    const userId = data.userId;
+                    // const groupId = data.groupId;
+                    
+                    // Ensuite, effectuez la requête de suppression du salon en incluant ces valeurs
+                    document.getElementById('leave-salon-btn').addEventListener('click', function() {
+                        fetch('/salon/leave', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    userId: userId,
+                                    // groupId: groupId
+                                })
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    // Redirection vers une autre page ou affichage d'un message de succès
+                                    window.location.href = '/accueil'; // Redirection vers la page d'accueil
+                                } else {
+                                    // Gérer les erreurs de suppression du salon
+                                    console.error('Erreur lors de la suppression de l\'utilisateur du salon');
+                                }
+                            })
+                            .catch(error => console.error('Erreur lors de la requête de suppression du salon:', error));
+                    });
+                })
+                .catch(error => console.error('Erreur lors de la récupération des informations utilisateur et groupe:', error));
+
+            updateSalonInfo();
+            setInterval(updateSalonInfo, 2000);
+        });
 </script>
+
 
 </html>
