@@ -15,6 +15,9 @@
         <?php include 'Header.php' ?>
     </header>
     <main class="m-5">
+        <?php
+        var_dump($_SESSION);
+        ?>
         <h1 class="mb-3">Salon</h1>
         <div class="input-group mb-5" style="width: 300px">
             <input type="text" class="form-control" aria-describedby="button-addon2" id="input2" value="<?= $groupeInfo[0]->code ?>" readonly>
@@ -38,6 +41,9 @@
         </div>
         <div class="input-group mb-3" style="width: 300px;">
             <button class="btn btn-danger" id="leave-salon-btn" style="width: 100%;">Quitter le salon</button>
+        </div>
+        <div class="input-group mb-3" style="width: 300px;">
+            <a class="btn btn-success" id="leave-salon-btn" style="width: 100%;" href="/jeu">Lancer la partie</a>
         </div>
     </main>
 </body>
@@ -104,43 +110,42 @@
     });
 
     document.addEventListener('DOMContentLoaded', function() {
-            // Nouvelle requête Fetch pour récupérer userId et groupId
-            fetch('/salon/user-info')
-                .then(response => response.json())
-                .then(data => {
-                    const userId = data.userId;
-                    // const groupId = data.groupId;
-                    
-                    // Ensuite, effectuez la requête de suppression du salon en incluant ces valeurs
-                    document.getElementById('leave-salon-btn').addEventListener('click', function() {
-                        fetch('/salon/leave', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    userId: userId,
-                                    // groupId: groupId
-                                })
-                            })
-                            .then(response => {
-                                if (response.ok) {
-                                    // Redirection vers une autre page ou affichage d'un message de succès
-                                    window.location.href = '/accueil'; // Redirection vers la page d'accueil
-                                } else {
-                                    // Gérer les erreurs de suppression du salon
-                                    console.error('Erreur lors de la suppression de l\'utilisateur du salon');
-                                }
-                            })
-                            .catch(error => console.error('Erreur lors de la requête de suppression du salon:', error));
-                    });
-                })
-                .catch(error => console.error('Erreur lors de la récupération des informations utilisateur et groupe:', error));
+        // Nouvelle requête Fetch pour récupérer userId et groupId
+        fetch('/salon/user-info')
+            .then(response => response.json())
+            .then(data => {
+                const userId = data.userId;
+                // const groupId = data.groupId;
 
-            updateSalonInfo();
-            setInterval(updateSalonInfo, 2000);
-        });
+                // Ensuite, effectuez la requête de suppression du salon en incluant ces valeurs
+                document.getElementById('leave-salon-btn').addEventListener('click', function() {
+                    fetch('/salon/leave', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                userId: userId,
+                                // groupId: groupId
+                            })
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                // Redirection vers une autre page ou affichage d'un message de succès
+                                window.location.href = '/accueil'; // Redirection vers la page d'accueil
+                            } else {
+                                // Gérer les erreurs de suppression du salon
+                                console.error('Erreur lors de la suppression de l\'utilisateur du salon');
+                            }
+                        })
+                        .catch(error => console.error('Erreur lors de la requête de suppression du salon:', error));
+                });
+            })
+            .catch(error => console.error('Erreur lors de la récupération des informations utilisateur et groupe:', error));
+
+        updateSalonInfo();
+        setInterval(updateSalonInfo, 2000);
+    });
 </script>
-
 
 </html>

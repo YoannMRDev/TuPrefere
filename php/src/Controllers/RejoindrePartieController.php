@@ -25,10 +25,15 @@ class RejoindrePartieController
         ];
 
         // Vérifier si l'utilisateur n'est pas déjà dans le groupe
-        // if (Groupe_Utilisateur::read($data["idGroupe"]) != null) {
-        //     header("Location: /salon");
-        //     exit;
-        // }
+        $groupeUtilisateur = Groupe_Utilisateur::read($data["idGroupe"]);
+        if ($groupeUtilisateur != null) {
+            foreach ($groupeUtilisateur as $index => $userOfGroup) {
+                if ($userOfGroup->idUtilisateur == $data["idUtilisateur"]) {
+                    header("Location: /accueil");
+                    exit;
+                }
+            }
+        }
 
         if(Groupe_Utilisateur::create($data) != null){
             header("Location: /salon");

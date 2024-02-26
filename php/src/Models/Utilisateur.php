@@ -150,6 +150,17 @@ class Utilisateur extends Model
         return $utilisateurs;
     }
 
+    public static function getCountOfAllUserOfGroup(int $idGroupe)
+    {
+        $db = static::getDB();
+        $req = $db->prepare("SELECT COUNT(u.idUtilisateur) as count FROM utilisateur as u JOIN groupe_utilisateur as gu ON (gu.idUtilisateur = u.idUtilisateur) WHERE gu.idGroupe = :idGroupe");
+        $req->bindParam(":idGroupe", $idGroupe);
+        $req->setFetchMode(PDO::FETCH_OBJ);
+        $req->execute();
+        $count = $req->fetch();
+        return $count;
+    }
+
     public static function authenticate() {
         // Session::init();
         if (Session::userIsLoggedIn() === false) {

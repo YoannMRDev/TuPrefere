@@ -48,9 +48,9 @@ class SalonController
 
             // Verifier s'il reste des utilisateurs dans le groupe et supprimer le groupe si vide
             // $groupeInfo = Groupe_Utilisateur::getGroupeByUtilisateur($userId);
-            // $utilisateursGroupe = Utilisateur::getAllUserofGroup($groupeInfo[0]->idGroupe);
+            // $utilisateursGroupe = Utilisateur::getCountOfAllUserOfGroup($groupeInfo[0]->idGroupe);
             // var_dump($utilisateursGroupe);
-            // if (count($utilisateursGroupe) == 0) {
+            // if ($utilisateursGroupe[0]->count == 0) {
             //     Groupe_Utilisateur::delete($groupeInfo[0]->idGroupe);
             // }
 

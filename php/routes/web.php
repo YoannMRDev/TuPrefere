@@ -7,6 +7,7 @@ use Core\Controllers\LoginController;
 use Core\Controllers\CreePartieController;
 use Core\Controllers\RejoindrePartieController;
 use Core\Controllers\SalonController;
+use Core\Controllers\JeuController;
 use Core\Session;
 
 //SimpleRouter Login
@@ -30,8 +31,7 @@ SimpleRouter::group(
         SimpleRouter::get('/salon/data', [SalonController::class, 'getData']);
         SimpleRouter::post('/salon/leave', [SalonController::class, 'leaveSalon']);
         SimpleRouter::get('/salon/user-info', [SalonController::class, 'getUserGroupInfo']);
-
-
+        SimpleRouter::get('/jeu', [JeuController::class, 'genererQuestion']);
 
         SimpleRouter::get('/user/profile', function () {
             // Uses Auth Middleware
@@ -49,7 +49,3 @@ SimpleRouter::group(
         });
     }
 );
-
-SimpleRouter::group(['middleware' => \Core\Middlewares\AuthMiddleware::class], function () {
-    // ...
-});

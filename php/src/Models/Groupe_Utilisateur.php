@@ -60,7 +60,7 @@ class Groupe_Utilisateur extends Model
         $req->bindParam(":idGroupe", $idGroupe);
         $req->setFetchMode(PDO::FETCH_OBJ);
         $req->execute();
-        $groupe = $req->fetch();
+        $groupe = $req->fetchAll();
         return $groupe;
     }
 
