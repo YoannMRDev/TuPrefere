@@ -100,11 +100,11 @@
   <ItemGroup>
     <Compile Include="DataBase\DB.cs" />
     <Compile Include="DataBase\FunctionDB.cs" />
-    <Compile Include="frmAjouterDilemme.cs">
+    <Compile Include="frmAjouterModifierDilemme.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmAjouterDilemme.Designer.cs">
-      <DependentUpon>frmAjouterDilemme.cs</DependentUpon>
+    <Compile Include="frmAjouterModifierDilemme.Designer.cs">
+      <DependentUpon>frmAjouterModifierDilemme.cs</DependentUpon>
     </Compile>
     <Compile Include="frmPagePrincipale.cs">
       <SubType>Form</SubType>
@@ -114,8 +114,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="frmAjouterDilemme.resx">
-      <DependentUpon>frmAjouterDilemme.cs</DependentUpon>
+    <EmbeddedResource Include="frmAjouterModifierDilemme.resx">
+      <DependentUpon>frmAjouterModifierDilemme.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmPagePrincipale.resx">
       <DependentUpon>frmPagePrincipale.cs</DependentUpon>

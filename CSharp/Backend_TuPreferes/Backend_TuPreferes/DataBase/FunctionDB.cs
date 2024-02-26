@@ -5,7 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+/*
+ * Auteur : Yoann Meier, Alexandre Babich
+ * Projet : Administration du jeu web Tu Prefere
+ * Description : Page de fonction agissant sur la base de donnée
+ */
 namespace Backend_TuPreferes.DataBase
 {
     public class FunctionDB
@@ -18,7 +22,7 @@ namespace Backend_TuPreferes.DataBase
         }
 
         /// <summary>
-        /// Return all the dilemmas
+        /// Retourne tous les dilemmes
         /// </summary>
         public List<string[]> GetAllDilemma()
         {
@@ -34,14 +38,13 @@ namespace Backend_TuPreferes.DataBase
         }
 
         /// <summary>
-        /// Return all the dilemmas of a category
+        /// Retourne tous les dilemmes d'une catégorie
         /// </summary>
-        /// <param name="categorie">name of the categorie</param>
-        /// <returns></returns>
+        /// <param name="categorie">nom de la catégorie</param>
         public List<string[]> GetAllDilemmaOfCategory(string categorie)
         {
             MySqlParameter[] parameters = {
-                new MySqlParameter("@id", MySqlDbType.Int32) { Value = GetCategoryByName(categorie)},
+                new MySqlParameter("@id", MySqlDbType.Int32) { Value = GetIdCategoryByName(categorie)},
             };
             List<string[]> results = db.dbRun("SELECT * FROM question WHERE idCategorie = @id", parameters);
             if (results != null)
@@ -53,17 +56,17 @@ namespace Backend_TuPreferes.DataBase
         }
 
         /// <summary>
-        ///  Ajoute un dilemme
+        /// Ajoute un dilemme
         /// </summary>
-        /// <param name="choix1">choice number 1</param>
-        /// <param name="choix2">choice number 2</param>
-        /// <param name="categorie">name of the categorie</param>
+        /// <param name="choix1">choix numéro 1</param>
+        /// <param name="choix2">choix numéro 2</param>
+        /// <param name="categorie">nom de la catégorie</param>
         public void AddDilemma(string choix1, string choix2, string categorie)
         {
             MySqlParameter[] parameters = {
                 new MySqlParameter("@choix1", MySqlDbType.VarChar) { Value = choix1 },
                 new MySqlParameter("@choix2", MySqlDbType.VarChar) { Value = choix2 },
-                new MySqlParameter("@idCategorie", MySqlDbType.Int32) { Value = GetCategoryByName(categorie) }
+                new MySqlParameter("@idCategorie", MySqlDbType.Int32) { Value = GetIdCategoryByName(categorie) }
             };
             db.dbRun("INSERT INTO question (choix1, choix2, idCategorie) VALUES (@choix1, @choix2, @idCategorie)", parameters);
         }
@@ -71,7 +74,7 @@ namespace Backend_TuPreferes.DataBase
         /// <summary>
         /// Retourne un dilemme avec l'id
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">id du dilemme</param>
         public List<string[]> GetDilemmaOfId(int id)
         {
             MySqlParameter[] parameters = {
@@ -117,10 +120,10 @@ namespace Backend_TuPreferes.DataBase
         }
 
         /// <summary>
-        /// Return the id of a category with the name
+        /// Retourne l'id de la catégorie avec le nom
         /// </summary>
         /// <param name="nom">nom de la categorie</param>
-        public int GetCategoryByName(string name)
+        public int GetIdCategoryByName(string name)
         {
             MySqlParameter[] parameters ={
                 new MySqlParameter("@nom", MySqlDbType.VarChar) { Value = name },
@@ -136,7 +139,7 @@ namespace Backend_TuPreferes.DataBase
         }
 
         /// <summary>
-        /// Return the name of a category with the id
+        /// Retourne le nom de la categorie avec l'id
         /// </summary>
         /// <param name="id">id de la categorie</param>
         public string GetNomCategoryById(int id)
@@ -151,7 +154,7 @@ namespace Backend_TuPreferes.DataBase
         }
 
         /// <summary>
-        /// Return all the categories
+        /// Retourne toutes les catégories
         /// </summary>
         public List<string[]> GetAllCategory()
         {
@@ -167,10 +170,10 @@ namespace Backend_TuPreferes.DataBase
         }
 
         /// <summary>
-        /// Add a category to the database
+        /// Ajoute une catégorie
         /// </summary>
-        /// <param name="category"></param>
-        /// <returns></returns>
+        /// <param name="category">nom de la categorie</param>
+        /// <returns>Message d'erreur ou de succès</returns>
         public string AddCategory(string category)
         {
             MySqlParameter[] parameters ={
@@ -196,9 +199,9 @@ namespace Backend_TuPreferes.DataBase
 
 
         /// <summary>
-        /// Switch if the category is archived or not
+        /// Change l'état de l'archivage d'une catégorie
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">id de la catégorie</param>
         public void ToggleArchive(int id)
         {
             try
@@ -222,15 +225,13 @@ namespace Backend_TuPreferes.DataBase
         }
 
         /// <summary>
-        /// Modify the name of a category
+        /// Modifie le nom d'une categorie avec son nom actuel
         /// </summary>
-        /// <param name="oldName"></param>
-        /// <param name="newName"></param>
+        /// <param name="oldName">ancien nom</param>
+        /// <param name="newName">nouveau nom</param>
         public void ModifyCategoryName(string oldName ,string newName)
         {
-                     db.dbRun("UPDATE categorie SET nom = @newName Where nom = @oldName", new MySqlParameter[] { new MySqlParameter("@oldName", oldName), new MySqlParameter("@newName", newName) });
+            db.dbRun("UPDATE categorie SET nom = @newName Where nom = @oldName", new MySqlParameter[] { new MySqlParameter("@oldName", oldName), new MySqlParameter("@newName", newName) });
         }
-
-
     }
 }

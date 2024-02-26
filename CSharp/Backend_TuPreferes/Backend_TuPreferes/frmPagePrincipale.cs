@@ -1,5 +1,4 @@
 ﻿using Backend_TuPreferes.DataBase;
-using MySqlX.XDevAPI.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+/*
+ * Auteur : Yoann Meier, Alexandre Babich
+ * Projet : Administration du jeu web Tu Prefere
+ * Description : Page principale de l'application
+ */
 namespace Backend_TuPreferes
 {
     public partial class frmPagePrincipale : Form
@@ -26,13 +29,13 @@ namespace Backend_TuPreferes
         }
 
         /// <summary>
-        /// Mettre toutes les infos récupéres des dilemmes dans la listbox
+        /// Affiche les dilemmes transmis en paramètres dans la listbox dilemme
         /// </summary>
-        /// <param name="results"></param>
-        private void LoadDataInListBoxDilemme(List<string[]> results)
+        /// <param name="dilemmes">les dilemmes a afficher</param>
+        private void LoadDataInListBoxDilemme(List<string[]> dilemmes)
         {
             lsbDilemmes.Items.Clear();
-            foreach (string[] row in results)
+            foreach (string[] row in dilemmes)
             {
                 string text = $"Id : {row[0]}, Choix 1 : {row[1]}, Choix 2 : {row[2]}, Archiver : {row[3]},Categorie : {functionDB.GetNomCategoryById(Convert.ToInt32(row[4]))}";
                 lsbDilemmes.Items.Add(text);
@@ -40,22 +43,36 @@ namespace Backend_TuPreferes
         }
 
         /// <summary>
-        /// Mettre toutes les infos récupéres des categories dans la listbox
+        /// Affiche les categories transmis en paramètres dans la listbox categorie
         /// </summary>
-        /// <param name="results"></param>
-        private void LoadDataInListBoxCategorie(List<string[]> results)
+        /// <param name="categories">les categories a afficher</param>
+        private void LoadDataInListBoxCategorie(List<string[]> categories)
         {
             lsbCategorie.Items.Clear();
-            foreach (string[] row in results)
+            foreach (string[] row in categories)
             {
                 string text = $" ID : {row[0]} - Nom : {row[1]} - Archiver : {row[2]} ";
                 lsbCategorie.Items.Add(text);
             }
         }
 
+        /// <summary>
+        /// Affiche les categories transmis en paramètre dans le combobox catégorie
+        /// </summary>
+        /// <param name="results">les categories a afficher</param>
+        private void LoadCategoriesToComboBox(List<string[]> results)
+        {
+            cbxCategorie.Items.Clear();
+            foreach (string[] row in results)
+            {
+                // Ajouter le nom de la catégorie à la ComboBox
+                cbxCategorie.Items.Add(row[1]);
+            }
+        }
+
         private void btnAjouter_Click(object sender, EventArgs e)
         {
-            frmAjouterDilemme ajouterDilemme = new frmAjouterDilemme(functionDB);
+            frmAjouterModifierDilemme ajouterDilemme = new frmAjouterModifierDilemme(functionDB);
 
             DialogResult result = ajouterDilemme.ShowDialog();
 
@@ -66,6 +83,9 @@ namespace Backend_TuPreferes
             }
         }
 
+        /// <summary>
+        /// Active ou désactive le bouton de recherche si le textbox n'est pas vide
+        /// </summary>
         private void tbxRechercheDilemme_TextChanged(object sender, EventArgs e)
         {
             btnRechercheDilemme.Enabled = tbxRechercheDilemme.Text != "";
@@ -73,7 +93,7 @@ namespace Backend_TuPreferes
 
         private void btnRechercheDilemme_Click(object sender, EventArgs e)
         {
-            int id = functionDB.GetCategoryByName(tbxRechercheDilemme.Text);
+            int id = functionDB.GetIdCategoryByName(tbxRechercheDilemme.Text);
             if (id != -1)
             {
                 LoadDataInListBoxDilemme(functionDB.GetAllDilemmaOfCategory(tbxRechercheDilemme.Text));
@@ -83,17 +103,24 @@ namespace Backend_TuPreferes
                 MessageBox.Show("Cette catégorie n'existe pas", "Attention");
             }
         }
-
+        
+        /// <summary>
+        /// Bouton pour afficher tous les dilemmes dans la listbox
+        /// </summary>
         private void btnResetDilemme_Click(object sender, EventArgs e)
         {
             LoadDataInListBoxDilemme(functionDB.GetAllDilemma());
         }
 
+        /// <summary>
+        /// Active ou désactive les boutons pour modifier et supprimer si un élément de la listbox est séléctionné
+        /// </summary>
         private void lsbDilemmes_SelectedIndexChanged(object sender, EventArgs e)
         {
             btnSupprimerDilemme.Enabled = lsbDilemmes.SelectedItem != null;
             btnModifierDilemme.Enabled = lsbDilemmes.SelectedItem != null;
         }
+
         private void btnSupprimerDilemme_Click(object sender, EventArgs e)
         {
             if (lsbDilemmes.SelectedItem != null)
@@ -121,12 +148,12 @@ namespace Backend_TuPreferes
                 string[] arrayData = lsbDilemmes.SelectedItem.ToString().Split(',');
                 int id = Convert.ToInt32(arrayData[0].Substring(arrayData.Length));
 
-                frmAjouterDilemme modifierDilemme = new frmAjouterDilemme(functionDB, functionDB.GetDilemmaOfId(id));
+                frmAjouterModifierDilemme modifierDilemme = new frmAjouterModifierDilemme(functionDB, functionDB.GetDilemmaOfId(id));
                 DialogResult result = modifierDilemme.ShowDialog();
 
                 if (result == DialogResult.OK)
                 {
-                    functionDB.UpdateDilemme(modifierDilemme.GetChoix1(), modifierDilemme.GetChoix2(), functionDB.GetCategoryByName(modifierDilemme.GetCategorie()), modifierDilemme.GetArchiver(), id);
+                    functionDB.UpdateDilemme(modifierDilemme.GetChoix1(), modifierDilemme.GetChoix2(), functionDB.GetIdCategoryByName(modifierDilemme.GetCategorie()), modifierDilemme.GetArchiver(), id);
 
                     // Recharge les données
                     LoadDataInListBoxDilemme(functionDB.GetAllDilemma());
@@ -140,10 +167,9 @@ namespace Backend_TuPreferes
 
         private void btnAjoutCategorie_Click(object sender, EventArgs e)
         {
-            string newCategory = tbxCategorie.Text;
-            if (!string.IsNullOrWhiteSpace(newCategory))
+            if (!string.IsNullOrWhiteSpace(tbxCategorie.Text))
             {
-                string result = functionDB.AddCategory(newCategory);
+                string result = functionDB.AddCategory(tbxCategorie.Text);
                 MessageBox.Show(result);
                 
                 // Rafraîchir la liste des catégories dans la ComboBox après l'ajout
@@ -175,8 +201,8 @@ namespace Backend_TuPreferes
                         functionDB.ToggleArchive(id);
                     }
                 }
+                LoadDataInListBoxCategorie(functionDB.GetAllCategory());
             }
-            LoadDataInListBoxCategorie(functionDB.GetAllCategory());
         }
 
         private void btnModifierCategorie_Click(object sender, EventArgs e)
@@ -184,6 +210,8 @@ namespace Backend_TuPreferes
             if (!string.IsNullOrWhiteSpace(tbxModifierCategorie.Text))
             {
                 functionDB.ModifyCategoryName(cbxCategorie.Text, tbxModifierCategorie.Text);
+
+                // Met a jour l'affichage
                 LoadDataInListBoxCategorie(functionDB.GetAllCategory());
                 LoadCategoriesToComboBox(functionDB.GetAllCategory());
                 LoadDataInListBoxDilemme(functionDB.GetAllDilemma());
@@ -199,16 +227,6 @@ namespace Backend_TuPreferes
         {
             LoadDataInListBoxCategorie(functionDB.GetAllCategory());
             tbxModifierCategorie.Text = cbxCategorie.Text;
-        }
-
-        private void LoadCategoriesToComboBox(List<string[]> results)
-        {
-            cbxCategorie.Items.Clear();
-            foreach (string[] row in results)
-            {
-                // Ajouter le nom de la catégorie à la ComboBox
-                cbxCategorie.Items.Add(row[1]);
-            }
         }
     }
 }

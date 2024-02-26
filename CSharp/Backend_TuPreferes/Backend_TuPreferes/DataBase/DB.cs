@@ -6,7 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
-
+/*
+ * Auteur : Yoann Meier, Alexandre Babich
+ * Projet : Administration du jeu web Tu Prefere
+ * Description : Page d'interaction avec la base de donnée
+ */
 namespace Backend_TuPreferes.DataBase
 {
     public class DB
@@ -16,6 +20,7 @@ namespace Backend_TuPreferes.DataBase
 
         public DB(string server, string username, string password, string dbName, uint port)
         {
+            // Connexion à la base de donnée
             builder = new MySqlConnectionStringBuilder();
 
             builder.Server = server;
@@ -27,6 +32,12 @@ namespace Backend_TuPreferes.DataBase
             connection = new MySqlConnection(builder.ConnectionString);
         }
 
+        /// <summary>
+        /// Exécute un query avec des paramètres optionnels
+        /// </summary>
+        /// <param name="sql">Le sql éxécuter</param>
+        /// <param name="param">les parmètres possibles</param>
+        /// <returns>Retourne les valeurs retournées par la base de donnée</returns>
         public List<string[]> dbRun(string sql, MySqlParameter[] param = null)
         {
             try

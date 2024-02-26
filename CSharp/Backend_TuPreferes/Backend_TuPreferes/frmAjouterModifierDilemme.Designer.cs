@@ -1,6 +1,6 @@
 ﻿namespace Backend_TuPreferes
 {
-    partial class frmAjouterDilemme
+    partial class frmAjouterModifierDilemme
     {
         /// <summary>
         /// Required designer variable.
@@ -28,26 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblTitre = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tbxChoix1 = new System.Windows.Forms.TextBox();
             this.tbxChoix2 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.cmbCategorie = new System.Windows.Forms.ComboBox();
-            this.btnAjouter = new System.Windows.Forms.Button();
+            this.btnAjouterModifier = new System.Windows.Forms.Button();
             this.cbxArchiver = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
-            // label1
+            // lblTitre
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(299, 25);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(214, 25);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Ajouter un dilemme";
+            this.lblTitre.AutoSize = true;
+            this.lblTitre.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitre.Location = new System.Drawing.Point(299, 25);
+            this.lblTitre.Name = "lblTitre";
+            this.lblTitre.Size = new System.Drawing.Size(214, 25);
+            this.lblTitre.TabIndex = 2;
+            this.lblTitre.Text = "Ajouter un dilemme";
             // 
             // label2
             // 
@@ -107,17 +107,17 @@
             this.cmbCategorie.TabIndex = 8;
             this.cmbCategorie.TextChanged += new System.EventHandler(this.EnabledButtonAdd);
             // 
-            // btnAjouter
+            // btnAjouterModifier
             // 
-            this.btnAjouter.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnAjouter.Enabled = false;
-            this.btnAjouter.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAjouter.Location = new System.Drawing.Point(43, 299);
-            this.btnAjouter.Name = "btnAjouter";
-            this.btnAjouter.Size = new System.Drawing.Size(228, 44);
-            this.btnAjouter.TabIndex = 9;
-            this.btnAjouter.Text = "Ajouter un dilemme";
-            this.btnAjouter.UseVisualStyleBackColor = true;
+            this.btnAjouterModifier.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnAjouterModifier.Enabled = false;
+            this.btnAjouterModifier.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAjouterModifier.Location = new System.Drawing.Point(43, 299);
+            this.btnAjouterModifier.Name = "btnAjouterModifier";
+            this.btnAjouterModifier.Size = new System.Drawing.Size(228, 44);
+            this.btnAjouterModifier.TabIndex = 9;
+            this.btnAjouterModifier.Text = "Ajouter un dilemme";
+            this.btnAjouterModifier.UseVisualStyleBackColor = true;
             // 
             // cbxArchiver
             // 
@@ -138,16 +138,16 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(780, 372);
             this.Controls.Add(this.cbxArchiver);
-            this.Controls.Add(this.btnAjouter);
+            this.Controls.Add(this.btnAjouterModifier);
             this.Controls.Add(this.cmbCategorie);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.tbxChoix2);
             this.Controls.Add(this.tbxChoix1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblTitre);
             this.Name = "frmAjouterDilemme";
-            this.Text = "frmAjouterDilemme";
+            this.Text = "Ajouter un dilemme";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -155,14 +155,14 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblTitre;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbxChoix1;
         private System.Windows.Forms.TextBox tbxChoix2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cmbCategorie;
-        private System.Windows.Forms.Button btnAjouter;
+        private System.Windows.Forms.Button btnAjouterModifier;
         private System.Windows.Forms.CheckBox cbxArchiver;
     }
 }
