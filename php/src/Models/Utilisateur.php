@@ -139,6 +139,17 @@ class Utilisateur extends Model
         return $utilisateurs;
     }
 
+    public static function getAllUserofGroup(int $idGroupe)
+    {
+        $db = static::getDB();
+        $req = $db->prepare("SELECT u.idUtilisateur, u.pseudo FROM utilisateur as u JOIN groupe_utilisateur as gu ON (gu.idUtilisateur = u.idUtilisateur) WHERE gu.idGroupe = :idGroupe");
+        $req->bindParam(":idGroupe", $idGroupe);
+        $req->setFetchMode(PDO::FETCH_OBJ);
+        $req->execute();
+        $utilisateurs = $req->fetchAll();
+        return $utilisateurs;
+    }
+
     public static function authenticate() {
         // Session::init();
         if (Session::userIsLoggedIn() === false) {

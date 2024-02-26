@@ -16,7 +16,7 @@
     </header>
     <main class="m-5">
         <div>
-            <form method="post" action="">
+            <form method="post" action="/creePartie">
                 <div class="mb-3">
                     <label for="FormControlInput1NbJoueur" class="form-label">Nombre de joueurs : </label>
                     <input name="nbJoueur" type="number" class="form-control" id="FormControlInput1NbJoueur" max="10" min="2" placeholder="2" required>

@@ -67,7 +67,7 @@ class Categorie extends Model
     public static function read(int $idCategorie)
     {
         $db = static::getDB();
-        $req = $db->prepare("SELECT idCatgorie, nom, archiver FROM categorie WHERE idCategorie = :idCategorie");
+        $req = $db->prepare("SELECT idCategorie, nom, archiver FROM categorie WHERE idCategorie = :idCategorie");
         $req->bindParam(":idCategorie", $idCategorie);
         $req->setFetchMode(PDO::FETCH_OBJ);
         $req->execute();
