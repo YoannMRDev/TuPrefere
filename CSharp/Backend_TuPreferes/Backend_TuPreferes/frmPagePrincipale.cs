@@ -172,8 +172,9 @@ namespace Backend_TuPreferes
                 string result = functionDB.AddCategory(tbxCategorie.Text);
                 MessageBox.Show(result);
                 
-                // Rafraîchir la liste des catégories dans la ComboBox après l'ajout
+                // Rafraîchir la liste des catégories
                 LoadCategoriesToComboBox(functionDB.GetAllCategory());
+                LoadDataInListBoxCategorie(functionDB.GetAllCategory());
             }
             else
             {
