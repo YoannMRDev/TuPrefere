@@ -31,6 +31,7 @@ class CreePartieController
         $data = [
             "idUtilisateur" => $_SESSION['idUtilisateur'],
             "idGroupe" => $idGroupe,
+            "maitre" => $_SESSION['idUtilisateur'],
         ];
 
         if(Groupe_Utilisateur::create($data) != null){
@@ -86,6 +87,7 @@ class CreePartieController
             'nbJoueur' => $nbJoueur,
             'nbQuestion' => $nbQuestion,
             'tempsReponse' => $tempsReponse,
+            'commencer' => 0,
             'idCategorie' => $idCategorie,
         ];
     }

@@ -15,12 +15,9 @@
         <?php include 'Header.php' ?>
     </header>
     <main class="m-5">
-        <?php
-        var_dump($_SESSION);
-        ?>
         <h1 class="mb-3">Salon</h1>
         <div class="input-group mb-5" style="width: 300px">
-            <input type="text" class="form-control" aria-describedby="button-addon2" id="input2" value="<?= $groupeInfo[0]->code ?>" readonly>
+            <input type="text" class="form-control" aria-describedby="button-addon2" id="input2" value="<?= end($groupeInfo)->code ?>" readonly>
             <button class="btn btn-outline-secondary bg-primary d-flex justify-content-center align-items-center" type="button" id="button-addon2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-copy text-white" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
                 </svg></button>
@@ -42,9 +39,15 @@
         <div class="input-group mb-3" style="width: 300px;">
             <button class="btn btn-danger" id="leave-salon-btn" style="width: 100%;">Quitter le salon</button>
         </div>
-        <div class="input-group mb-3" style="width: 300px;">
-            <a class="btn btn-success" id="leave-salon-btn" style="width: 100%;" href="/jeu">Lancer la partie</a>
-        </div>
+        <?php
+        if ($_SESSION['idUtilisateur'] == end($groupeInfo)->maitre) {
+        ?>
+            <div class="input-group mb-3" style="width: 300px;">
+                <a class="btn btn-success" id="leave-salon-btn" style="width: 100%;" href="/jeu">Lancer la partie</a>
+            </div>
+        <?php
+        }
+        ?>
     </main>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -73,22 +76,22 @@
 
                 // Mise à jour des informations sur la partie
                 salonInfo.innerHTML = `
-                    <tr>
-                        <th>Nombre de joueur</th>
-                        <td>${data.groupeInfo[0].nbJoueur}</td>
-                    </tr>
-                    <tr>
-                        <th>Nombre de question</th>
-                        <td>${data.groupeInfo[0].nbQuestion}</td>
-                    </tr>
-                    <tr>
-                        <th>Temps de réponse</th>
-                        <td>${data.groupeInfo[0].tempsReponse / 60}min</td>
-                    </tr>
-                    <tr>
-                        <th>Thème</th>
-                        <td>${data.groupeInfo[0].nom}</td>
-                    </tr>
+                <tr>
+                    <th>Nombre de joueur</th>
+                    <td>${data.groupeInfo[data.groupeInfo.length - 1].nbJoueur}</td>
+                </tr>
+                <tr>
+                    <th>Nombre de question</th>
+                    <td>${data.groupeInfo[data.groupeInfo.length - 1].nbQuestion}</td>
+                </tr>
+                <tr>
+                    <th>Temps de réponse</th>
+                    <td>${data.groupeInfo[data.groupeInfo.length - 1].tempsReponse / 60}min</td>
+                </tr>
+                <tr>
+                    <th>Thème</th>
+                    <td>${data.groupeInfo[data.groupeInfo.length - 1].nom}</td>
+                </tr>
             `;
 
                 // Mise à jour de la liste des joueurs en ligne
@@ -102,11 +105,23 @@
                 });
             })
             .catch(error => console.error('Erreur lors de la récupération des données du salon:', error));
+
+        // Vérifier si la partie a commencé
+        fetch('/salon/commencer')
+            .then(response => response.json())
+            .then(data => {
+                // alert(data.commencer);
+                if (data.commencer) {
+                    // Redirection vers la page de jeu
+                    window.location.href = '/jeu';
+                }
+            })
+            .catch(error => console.error('Erreur lors de la récupération de la valeur commencer:', error));
     }
 
     document.addEventListener('DOMContentLoaded', function() {
         updateSalonInfo();
-        setInterval(updateSalonInfo, 2000);
+        setInterval(updateSalonInfo, 100);
     });
 
     document.addEventListener('DOMContentLoaded', function() {

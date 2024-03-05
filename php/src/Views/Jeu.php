@@ -30,9 +30,9 @@ $questionCount = count($questionIds);
                         <?php $question = \Core\Models\Question::read($questionId); ?>
                         <p class="fw-bold">Tu préfères ...</p>
                         <div class="d-flex flex-row align-items-center">
-                            <button style="width: 30%; height: 100px;" class="btn btn-danger"><?= $question->choix1 ?></button>
+                            <button id="choix1" style="width: 30%; height: 100px;" onclick="choixClickHandler(<?= $question->idQuestion ?>, 1)" class="btn btn-danger choix-btn"><?= $question->choix1 ?></button>
                             <p class="fw-bold ms-3 me-3">ou</p>
-                            <button style="width: 30%; height: 100px;" class="btn btn-success"><?= $question->choix2 ?></button>
+                            <button id="choix2" style="width: 30%; height: 100px;" onclick="choixClickHandler(<?= $question->idQuestion ?>, 2)" class="btn btn-success choix-btn"><?= $question->choix2 ?></button>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -43,9 +43,9 @@ $questionCount = count($questionIds);
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script>
     // Récupérez le temps de réponse en secondes depuis les données du groupe
-    const tempsReponse = <?= $args['groupe'][0]->tempsReponse ?>;
+    const tempsReponse = <?= end($args['groupe'])->tempsReponse ?>;
     const questionCount = <?= $questionCount ?>;
-    
+
     let questionIndex = 0;
     let tempsRestant = tempsReponse;
     const timerElement = document.getElementById('timer');
@@ -80,11 +80,48 @@ $questionCount = count($questionIds);
         }
     }
 
+    function choixClickHandler(questionId, choix) {
+        // Enregistrer le vote dans la base de données
+        fetchVote(questionId, choix);
+
+        // Passez à la question suivante lorsque l'utilisateur clique sur l'un des choix
+        questionIndex++;
+        tempsRestant = tempsReponse;
+        if (questionIndex < questionCount) {
+            showQuestion(questionIndex);
+        } else {
+            // Toutes les questions ont été posées
+            clearInterval(timerInterval);
+            // Ajoutez ici le code pour terminer le jeu
+            alert('Toutes les questions ont été posées!');
+        }
+    }
+
+    function fetchVote(questionId, choix) {
+        fetch('/vote', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    idQuestion: questionId,
+                    choix: choix,
+                    idUtilisateur: <?= $_SESSION['idUtilisateur'] ?>,
+                    dateSaisie: new Date().toISOString().slice(0, 19).replace('T', ' '),
+                    idGroupe: <?= end($args['groupe'])->idGroupe ?>,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+    }
+
     updateTimer();
     const timerInterval = setInterval(updateTimer, 1000);
 
     // Afficher la première question au chargement de la page
     showQuestion(questionIndex);
 </script>
+
 
 </html>

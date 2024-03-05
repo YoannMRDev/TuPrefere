@@ -4,6 +4,7 @@ namespace Core\Controllers;
 
 use Core\Views\View;
 
+use Core\Models\Groupe_Utilisateur;
 use Pecee\Http\Input\InputHandler;
 use Pecee\SimpleRouter\SimpleRouter;
 

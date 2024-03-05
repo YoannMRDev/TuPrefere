@@ -15,9 +15,10 @@ class Groupe extends Model
     protected int $nbJoueur;
     protected int $nbQuestion;
     protected int $tempsReponse;
+    protected bool $commencer;
     protected int $idCategorie;
 
-    public function __construct($idGroupe = "", $code = "", $actif = "", $nbJoueur = "", $nbQuestion = "", $tempsReponse = "", $idCategorie = "")
+    public function __construct($idGroupe = "", $code = "", $actif = "", $nbJoueur = "", $nbQuestion = "", $tempsReponse = "", $commencer = "" ,$idCategorie = "")
     {
         $this->$idGroupe = $idGroupe;
         $this->$code = $code;
@@ -25,6 +26,7 @@ class Groupe extends Model
         $this->$nbJoueur = $nbJoueur;
         $this->$nbQuestion = $nbQuestion;
         $this->$tempsReponse = $tempsReponse;
+        $this->$commencer = $commencer;
         $this->$idCategorie = $idCategorie;
     }
 
@@ -90,6 +92,16 @@ class Groupe extends Model
         $this->$tempsReponse = $tempsReponse;
     }
 
+    public function getCommencer()
+    {
+        return $this->commencer;
+    }
+
+    public function setCommencer(int $commencer)
+    {
+        $this->$commencer = $commencer;
+    }
+
     public function getIdCategorie()
     {
         return $this->idCategorie;
@@ -106,12 +118,13 @@ class Groupe extends Model
     public static function create(array $data)
     {
         $db = static::getDB();
-        $req = $db->prepare("INSERT INTO groupe (idGroupe, code, actif, nbJoueur, nbQuestion, tempsReponse, idCategorie) values(default, :code, :actif, :nbJoueur, :nbQuestion, :tempsReponse, :idCategorie)");
+        $req = $db->prepare("INSERT INTO groupe (idGroupe, code, actif, nbJoueur, nbQuestion, tempsReponse, commencer, idCategorie) values(default, :code, :actif, :nbJoueur, :nbQuestion, :tempsReponse, :commencer, :idCategorie)");
         $req->bindParam(":code", $data["code"]);
         $req->bindParam(":actif", $data["actif"]);
         $req->bindParam(":nbJoueur", $data["nbJoueur"]);
         $req->bindParam(":nbQuestion", $data["nbQuestion"]);
         $req->bindParam(":tempsReponse", $data["tempsReponse"]);
+        $req->bindParam(":commencer", $data["commencer"]);
         $req->bindParam(":idCategorie", $data["idCategorie"]);
         $req->execute();
         return $db->lastInsertId();  
@@ -121,7 +134,7 @@ class Groupe extends Model
     public static function read(int $idGroupe)
     {
         $db = static::getDB();
-        $req = $db->prepare("SELECT idGroupe, code, actif, nbJoueur, nbQuestion, tempsReponse, idCategorie FROM groupe WHERE idGroupe = :idGroupe");
+        $req = $db->prepare("SELECT idGroupe, code, actif, nbJoueur, nbQuestion, tempsReponse, commencer, idCategorie FROM groupe WHERE idGroupe = :idGroupe");
         $req->bindParam(":idGroupe", $idGroupe);
         $req->setFetchMode(PDO::FETCH_OBJ);
         $req->execute();
@@ -132,13 +145,14 @@ class Groupe extends Model
     public static function update(int $idGroupe, array $data)
     {
         $db = static::getDB();
-        $req = $db->prepare("UPDATE groupe SET code = :code, actif = :actif, nbJoueur = :nbJoueur, nbQuestion = :nbQuestion, tempsReponse = :tempsReponse, idCategorie = :idCategorie WHERE idGroupe = :idGroupe");
+        $req = $db->prepare("UPDATE groupe SET code = :code, actif = :actif, nbJoueur = :nbJoueur, nbQuestion = :nbQuestion, tempsReponse = :tempsReponse, commencer = :commencer, idCategorie = :idCategorie WHERE idGroupe = :idGroupe");
         $req->bindParam(":idGroupe", $idGroupe);
         $req->bindParam(":code", $data["code"]);
         $req->bindParam(":actif", $data["actif"]);
         $req->bindParam(":nbJoueur", $data["nbJoueur"]);
         $req->bindParam(":nbQuestion", $data["nbQuestion"]);
         $req->bindParam(":tempsReponse", $data["tempsReponse"]);
+        $req->bindParam(":commencer", $data["commencer"]);
         $req->bindParam(":idCategorie", $data["idCategorie"]);
         $req->execute();
     }
@@ -154,7 +168,7 @@ class Groupe extends Model
     public static function getAll()
     {
         $db = static::getDB();
-        $req = $db->prepare("SELECT idGroupe, code, actif, nbJoueur, nbQuestion, tempsReponse, idCategorie FROM groupe");
+        $req = $db->prepare("SELECT idGroupe, code, actif, nbJoueur, nbQuestion, tempsReponse, commencer, idCategorie FROM groupe");
         $req->setFetchMode(PDO::FETCH_OBJ);
         $req->execute();
         $groupe = $req->fetchAll();
@@ -170,5 +184,14 @@ class Groupe extends Model
         $req->execute();
         $groupe = $req->fetch();
         return $groupe;
+    }
+
+    public static function updateCommencer(int $bool, int $idGroupe)
+    {
+        $db = static::getDB();
+        $req = $db->prepare("UPDATE groupe SET commencer = :commencer WHERE idGroupe = :idGroupe");
+        $req->bindParam(":commencer", $bool);
+        $req->bindParam(":idGroupe", $idGroupe);
+        $req->execute();
     }
 }

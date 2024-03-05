@@ -22,8 +22,8 @@ class SalonController
     public function getData()
     {
         $groupeInfo = Groupe_Utilisateur::getGroupeByUtilisateur($_SESSION['idUtilisateur']);
-        $utilisateursGroupe = Utilisateur::getAllUserofGroup($groupeInfo[0]->idGroupe);
-        
+        $utilisateursGroupe = Utilisateur::getAllUserofGroup(end($groupeInfo)->idGroupe);
+
         $data = array(
             'groupeInfo' => $groupeInfo,
             'utilisateursGroupe' => $utilisateursGroupe
@@ -84,6 +84,14 @@ class SalonController
             exit;
         }
     }
-}
 
-?>
+    public function checkCommencer()
+    {
+        $groupeInfo = Groupe_Utilisateur::getGroupeByUtilisateur($_SESSION['idUtilisateur']);
+        $commencer = end($groupeInfo)->commencer;
+
+        // Retournez la valeur de commencer sous forme de réponse JSON
+        header('Content-Type: application/json');
+        echo json_encode(['commencer' => $commencer]);
+    }
+}

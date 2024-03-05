@@ -31,7 +31,10 @@ SimpleRouter::group(
         SimpleRouter::get('/salon/data', [SalonController::class, 'getData']);
         SimpleRouter::post('/salon/leave', [SalonController::class, 'leaveSalon']);
         SimpleRouter::get('/salon/user-info', [SalonController::class, 'getUserGroupInfo']);
+        SimpleRouter::get('/salon/commencer', [SalonController::class, 'checkCommencer']);  
         SimpleRouter::get('/jeu', [JeuController::class, 'genererQuestion']);
+        SimpleRouter::post('/vote', [JeuController::class, 'insertVote']);
+
 
         SimpleRouter::get('/user/profile', function () {
             // Uses Auth Middleware

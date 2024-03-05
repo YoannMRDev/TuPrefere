@@ -10,12 +10,14 @@ use Core\Session;
 class Groupe_Utilisateur extends Model
 {
     protected int $idUtilisateur;
-    protected string $idGroupe;
+    protected int $idGroupe;
+    protected int $maitre;
 
-    public function __construct($idUtilisateur = "", $idGroupe = "")
+    public function __construct($idUtilisateur = "", $idGroupe = "", $maitre = "")
     {
         $this->$idUtilisateur = $idUtilisateur;
         $this->$idGroupe = $idGroupe;
+        $this->$maitre = $maitre;
     }
 
     #region getters/setters
@@ -40,23 +42,33 @@ class Groupe_Utilisateur extends Model
         $this->$idGroupe = $idGroupe;
     }
 
+    public function getMaitre()
+    {
+        return $this->maitre;
+    }
+
+    public function setMaitre(int $maitre)
+    {
+        $this->$maitre = $maitre;
+    }
+
     #endregion getters/setters
 
     public static function create(array $data)
     {
         $db = static::getDB();
-        $req = $db->prepare("INSERT INTO groupe_utilisateur (idUtilisateur, idGroupe) values(:idUtilisateur, :idGroupe)");
+        $req = $db->prepare("INSERT INTO groupe_utilisateur (idUtilisateur, idGroupe, maitre) values(:idUtilisateur, :idGroupe, :maitre)");
         $req->bindParam(":idUtilisateur", $data["idUtilisateur"]);
         $req->bindParam(":idGroupe", $data["idGroupe"]);
+        $req->bindParam(":maitre", $data["maitre"]);
         $req->execute();
-        return $db->lastInsertId();  
-
+        return $db->lastInsertId();
     }
 
     public static function read(int $idGroupe)
     {
         $db = static::getDB();
-        $req = $db->prepare("SELECT idUtilisateur, idGroupe FROM groupe_utilisateur WHERE idGroupe = :idGroupe");
+        $req = $db->prepare("SELECT idUtilisateur, idGroupe, maitre FROM groupe_utilisateur WHERE idGroupe = :idGroupe");
         $req->bindParam(":idGroupe", $idGroupe);
         $req->setFetchMode(PDO::FETCH_OBJ);
         $req->execute();
@@ -75,7 +87,7 @@ class Groupe_Utilisateur extends Model
     public static function getAll()
     {
         $db = static::getDB();
-        $req = $db->prepare("SELECT idUtilisateur, idGroupe FROM groupe_utilisateur");
+        $req = $db->prepare("SELECT idUtilisateur, idGroupe, maitre FROM groupe_utilisateur");
         $req->setFetchMode(PDO::FETCH_OBJ);
         $req->execute();
         $groupe = $req->fetchAll();
@@ -85,7 +97,7 @@ class Groupe_Utilisateur extends Model
     public static function getGroupeByUtilisateur(int $idUtilisateur)
     {
         $db = static::getDB();
-        $req = $db->prepare("SELECT g.idGroupe, g.code, g.actif, g.nbJoueur, g.nbQuestion, g.tempsReponse, g.idCategorie, c.nom FROM groupe_utilisateur as gu JOIN utilisateur as u ON (gu.idUtilisateur = u.idUtilisateur) JOIN groupe as g ON (gu.idGroupe = g.idGroupe) JOIN categorie as c ON (c.idCategorie = g.idCategorie) WHERE u.idUtilisateur = :idUtilisateur");
+        $req = $db->prepare("SELECT g.idGroupe, g.code, g.actif, g.nbJoueur, g.nbQuestion, g.tempsReponse, g.commencer, g.idCategorie, c.nom, gu.maitre FROM groupe_utilisateur as gu JOIN utilisateur as u ON (gu.idUtilisateur = u.idUtilisateur) JOIN groupe as g ON (gu.idGroupe = g.idGroupe) JOIN categorie as c ON (c.idCategorie = g.idCategorie) WHERE u.idUtilisateur = :idUtilisateur");
         $req->bindParam(":idUtilisateur", $idUtilisateur);
         $req->setFetchMode(PDO::FETCH_OBJ);
         $req->execute();
