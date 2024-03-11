@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<!--
+    Nom Prénom: Jenusiyan Parankirinathan
+    Projet: Tu préfères
+    Détail: Projet TPI 
+    Date: 05.02.24
+-->
 <html lang="fr">
 
 <head>

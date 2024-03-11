@@ -57,8 +57,7 @@ class JeuController
             Groupe::updateCommencer(1, end($groupe)->idGroupe);
 
             View::render("Jeu.php", ["questionIds" => $questionIds, "questionCount" => count($questionIds), "groupe" => $groupe]);
-        }
-        else{
+        } else {
             $questions = Groupe_Question::getAllQuestionByGroup(end($groupe)->idGroupe);
 
             foreach ($questions as $index => $question) {
@@ -72,7 +71,7 @@ class JeuController
     public function insertVote()
     {
         $requestData = json_decode(file_get_contents('php://input'), true);
-    
+
         if (isset($requestData['idQuestion'], $requestData['choix'], $requestData['idUtilisateur'], $requestData['dateSaisie'], $requestData['idGroupe'])) {
             $idQuestion = $requestData['idQuestion'];
             $choix = $requestData['choix'];
@@ -87,5 +86,69 @@ class JeuController
             echo json_encode(['success' => false, 'message' => 'Données manquantes']);
         }
     }
-    
+
+    public function reviewPartie()
+    {
+        // Recuperer le groupe de l'utilisateur
+        $groupe = Groupe_Utilisateur::getGroupeByUtilisateur($_SESSION['idUtilisateur']);
+
+        // Recuperer toutes les données de la partie
+        $tabDataPartie = Voter::getAllDataJeu(end($groupe)->idGroupe);
+
+        // Rediriger l'utilisateur vers la page de révision de la partie
+        View::render("ReviewPartie.php", ["tabDataPartie" => $tabDataPartie]);
+    }
+
+    public function verifierAllQuestionsRepondues()
+    {
+        // Recuperer le groupe de l'utilisateur
+        $groupe = Groupe_Utilisateur::getGroupeByUtilisateur($_SESSION['idUtilisateur']);
+        
+        $_SESSION['allQuestionsRepondues'] = null;
+
+        // Recuperer toutes les joueur du groupe
+        $utilisateurs = Groupe_Utilisateur::getUtilisateurIdByGroupe(end($groupe)->idGroupe);
+
+        // Voir si toutes joueurs ont repondu aux questions par rapport au nombre de questions et de votes
+        foreach ($utilisateurs as $index => $utilisateur) {
+            $nbVote = Voter::getNbVoteByGroupeByUtilisateur(end($groupe)->idGroupe, $utilisateur->idUtilisateur);
+            if (end($groupe)->nbQuestion != $nbVote->nbVote) {
+                $_SESSION['allQuestionsRepondues'] = false;
+                // Rediriger l'utilisateur vers la page d'attente de la fin de la partie
+                header("Location: /jeu/salonFinPartie/");
+                exit();
+            }
+        }
+        $_SESSION['allQuestionsRepondues'] = true;
+
+        // Rediriger l'utilisateur vers la page de révision de la partie
+        header("Location: /jeu/reviewPartie");
+        exit();
+    }
+
+    public function getVerifierAllQuestionsRepondues(){
+
+        // $this->verifierAllQuestionsRepondues();
+
+        header('Content-Type: application/json');
+        echo json_encode(['allQuestionsRepondues' => $_SESSION['allQuestionsRepondues']]);
+        exit;
+    }
+
+    public function salonFinPartie()
+    {
+        View::render("SalonFinPartie.php");
+    }
+
+    public function quitterPartie()
+    {
+        // Mettre à jour l'état du groupe, de aftif à inactif (1 => 0)
+        $groupe = Groupe_Utilisateur::getGroupeByUtilisateur($_SESSION['idUtilisateur']);
+
+        Groupe::updateActif(0, end($groupe)->idGroupe);
+
+        // Rediriger l'utilisateur vers la page d'accueil
+        header("Location: /accueil");
+        exit();
+    }
 }

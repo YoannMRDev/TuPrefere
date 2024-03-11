@@ -119,4 +119,37 @@ class Voter extends Model
         $groupe = $req->fetchAll();
         return $groupe;
     }
+
+    public static function getVoteByGroupe(int $idGroupe)
+    {
+        $db = static::getDB();
+        $req = $db->prepare("SELECT idUtilisateur, idGroupe, idQuestion, choix, dateSaisie FROM voter WHERE idGroupe = :idGroupe  ORDER BY idQuestion ASC");
+        $req->bindParam(":idGroupe", $idGroupe);
+        $req->setFetchMode(PDO::FETCH_OBJ);
+        $req->execute();
+        $groupe = $req->fetchAll();
+        return $groupe;
+    }
+
+    public static function getNbVoteByGroupeByUtilisateur(int $idGroupe, int $utilisateur){
+        $db = static::getDB();
+        $req = $db->prepare("SELECT COUNT(*) as nbVote FROM voter WHERE idGroupe = :idGroupe AND idUtilisateur = :idUtilisateur");
+        $req->bindParam(":idGroupe", $idGroupe);
+        $req->bindParam(":idUtilisateur", $utilisateur);
+        $req->setFetchMode(PDO::FETCH_OBJ);
+        $req->execute();
+        $groupe = $req->fetch();
+        return $groupe;
+    }
+
+    public static function getAllDataJeu(int $idGroupe)
+    {
+        $db = static::getDB();
+        $req = $db->prepare("SELECT u.pseudo, u.idUtilisateur, v.choix, q.choix1, q.choix2, q.idQuestion FROM utilisateur AS u JOIN voter AS v ON u.idUtilisateur = v.idUtilisateur JOIN question AS q ON v.idQuestion = q.idQuestion WHERE v.idGroupe = :idGroupe ORDER BY q.idQuestion ASC;");
+        $req->bindParam(":idGroupe", $idGroupe);
+        $req->setFetchMode(PDO::FETCH_OBJ);
+        $req->execute();
+        $groupe = $req->fetchAll();
+        return $groupe;
+    }
 }

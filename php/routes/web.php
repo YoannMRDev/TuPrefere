@@ -34,6 +34,11 @@ SimpleRouter::group(
         SimpleRouter::get('/salon/commencer', [SalonController::class, 'checkCommencer']);  
         SimpleRouter::get('/jeu', [JeuController::class, 'genererQuestion']);
         SimpleRouter::post('/vote', [JeuController::class, 'insertVote']);
+        SimpleRouter::get('/jeu/verifierAllQuestionsRepondues', [JeuController::class, 'verifierAllQuestionsRepondues']);
+        SimpleRouter::get('/jeu/getVerifierAllQuestionsRepondues', [JeuController::class, 'getVerifierAllQuestionsRepondues']);
+        SimpleRouter::get('/jeu/reviewPartie', [JeuController::class, 'reviewPartie']);
+        SimpleRouter::get('/jeu/salonFinPartie', [JeuController::class, 'salonFinPartie']);
+        SimpleRouter::get('/jeu/quitterPartie', [JeuController::class, 'quitterPartie']);
 
 
         SimpleRouter::get('/user/profile', function () {

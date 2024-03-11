@@ -105,6 +105,17 @@ class Groupe_Utilisateur extends Model
         return $groupe;
     }
 
+    public static function getUtilisateurIdByGroupe(int $idGroupe)
+    {
+        $db = static::getDB();
+        $req = $db->prepare("SELECT u.idUtilisateur, u.pseudo FROM groupe_utilisateur as gu JOIN utilisateur as u ON (gu.idUtilisateur = u.idUtilisateur) WHERE gu.idGroupe = :idGroupe");
+        $req->bindParam(":idGroupe", $idGroupe);
+        $req->setFetchMode(PDO::FETCH_OBJ);
+        $req->execute();
+        $groupe = $req->fetchAll();
+        return $groupe;
+    }
+
     public static function deleteByUtilisateur(int $idUtilisateur)
     {
         $db = static::getDB();

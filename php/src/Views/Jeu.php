@@ -5,6 +5,12 @@ $questionCount = count($questionIds);
 ?>
 
 <!DOCTYPE html>
+<!--
+    Nom Prénom: Jenusiyan Parankirinathan
+    Projet: Tu préfères
+    Détail: Projet TPI 
+    Date: 05.02.24
+-->
 <html lang="fr">
 
 <head>
@@ -30,9 +36,9 @@ $questionCount = count($questionIds);
                         <?php $question = \Core\Models\Question::read($questionId); ?>
                         <p class="fw-bold">Tu préfères ...</p>
                         <div class="d-flex flex-row align-items-center">
-                            <button id="choix1" style="width: 30%; height: 100px;" onclick="choixClickHandler(<?= $question->idQuestion ?>, 1)" class="btn btn-danger choix-btn"><?= $question->choix1 ?></button>
+                            <button id="choix1" style="width: 30%; height: 100px;" value="<?= $question->idQuestion ?>" onclick="choixClickHandler(<?= $question->idQuestion ?>, 1)" class="btn btn-danger choix-btn"><?= $question->choix1 ?></button>
                             <p class="fw-bold ms-3 me-3">ou</p>
-                            <button id="choix2" style="width: 30%; height: 100px;" onclick="choixClickHandler(<?= $question->idQuestion ?>, 2)" class="btn btn-success choix-btn"><?= $question->choix2 ?></button>
+                            <button id="choix2" style="width: 30%; height: 100px;" value="<?= $question->idQuestion ?>" onclick="choixClickHandler(<?= $question->idQuestion ?>, 2)" class="btn btn-success choix-btn"><?= $question->choix2 ?></button>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -68,14 +74,22 @@ $questionCount = count($questionIds);
         if (tempsRestant < 0) {
             // Si le temps est écoulé, passez à la question suivante
             questionIndex++;
+
+            // Récupérer l'identifiant de la question actuelle
+            var idQuestion = document.getElementById('choix1').value;
+
+            // Inserer un vote vide dans la base de données
+            fetchVote(idQuestion, 0);
+
             tempsRestant = tempsReponse;
             if (questionIndex < questionCount) {
                 showQuestion(questionIndex);
             } else {
                 // Toutes les questions ont été posées
                 clearInterval(timerInterval);
-                // Ajoutez ici le code pour terminer le jeu
-                alert('Toutes les questions ont été posées!');
+
+                // Rediriger l'utilisateur vers la page de révision de la partie
+                window.location.href = '/jeu/verifierAllQuestionsRepondues';
             }
         }
     }
@@ -92,8 +106,9 @@ $questionCount = count($questionIds);
         } else {
             // Toutes les questions ont été posées
             clearInterval(timerInterval);
-            // Ajoutez ici le code pour terminer le jeu
-            alert('Toutes les questions ont été posées!');
+
+            // Rediriger l'utilisateur vers la page de révision de la partie
+            window.location.href = '/jeu/verifierAllQuestionsRepondues';
         }
     }
 

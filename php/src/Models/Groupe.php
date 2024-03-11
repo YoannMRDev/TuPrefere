@@ -194,4 +194,13 @@ class Groupe extends Model
         $req->bindParam(":idGroupe", $idGroupe);
         $req->execute();
     }
+
+    public static function updateActif(int $bool, int $idGroupe)
+    {
+        $db = static::getDB();
+        $req = $db->prepare("UPDATE groupe SET actif = :actif WHERE idGroupe = :idGroupe");
+        $req->bindParam(":actif", $bool);
+        $req->bindParam(":idGroupe", $idGroupe);
+        $req->execute();
+    }
 }
